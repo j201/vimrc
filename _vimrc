@@ -1,5 +1,4 @@
 set nocompatible
-source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
 
@@ -31,13 +30,22 @@ endfunction
 if has("gui_running")
 	set guifont=Consolas:h10
 	colorscheme custom_vivify
+	let $COLORSCHEME=$VIMRUNTIME . '\colors\' . g:colors_name . '.vim'
 endif
 
+"set shell=C:/Windows/System32/cmd.exe
+"set shellcmdflag=/c
+set directory=$TEMP		" Temp dir
+
+set ruler				" Show cursor position at bottom
+set history=30			" Number of remembered commands
+set incsearch			" Incremental searching
 set tabstop=4			" Set tab width
 set shiftwidth=4		" Set autoindent tab width
 set noexpandtab			" No spaces, only tabs
 "set smarttab			" Tab to the correct location when pressed at the start of a line
 set autoindent			" Indents match the last line
+"set clipboard=unnamed	" Use clipboard instead of "+
 set fileformats="unix" " Use unix newlines by default in new buffers
 set guioptions-=t		" Remove tearoff menu options
 set guioptions-=T		" Hide toolbar
@@ -63,17 +71,27 @@ set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 
 " Key mappings
-nnoremap <C-left> 	:tabprevious<CR>
-nnoremap <C-right>	:tabnext<CR>
+"nnoremap <C-left> 	:tabprevious<CR>
+"nnoremap <C-right>	:tabnext<CR>
+nnoremap <C-left>	<Esc>:bprevious<CR>i
+nnoremap <C-right>	<Esc>:bnext<CR>i
 nnoremap <C-w><C-t>	:tabnew<CR>
 nnoremap <C-w><C-w>	:confirm bd<CR>
-inoremap <C-left>	<Esc>:tabprevious<CR>i
-inoremap <C-right>	<Esc>:tabnext<CR>i inoremap <C-w><C-t>	<Esc>:tabnew<CR>i
+"inoremap <C-left>	<Esc>:tabprevious<CR>i
+"inoremap <C-right>	<Esc>:tabnext<CR>i
+inoremap <C-left>	<Esc>:bprevious<CR>i
+inoremap <C-right>	<Esc>:bnext<CR>i
+inoremap <C-w><C-t>	<Esc>:tabnew<CR>i
 inoremap <C-w><C-w>	<Esc>:confirm bd<CR>i
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
+" inoremap <something>		<Esc>cc
 nnoremap gb			^d0i<Backspace> <Esc>l	
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
+nnoremap <esc> :noh<return><esc>
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
 
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
@@ -121,8 +139,11 @@ Bundle  'justinmk/vim-gtfo'
 Bundle 'terryma/vim-smooth-scroll'
 " Automatically load autocomplete menu
 Bundle 'neocomplcache'
+" Buffers as tabs
+Bundle 'fholgado/minibufexpl.vim'
 
 filetype plugin indent on
+syntax on
 
 " Plugin settings
 let g:syntastic_javascript_checkers=['jshint']

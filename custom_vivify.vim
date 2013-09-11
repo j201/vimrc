@@ -124,3 +124,14 @@ hi doxygencomment guifg=#ad7b20 guibg=NONE guisp=NONE gui=NONE ctermfg=130 cterm
 hi cspecialcharacter guifg=#c080d0 guibg=#404040 guisp=#404040 gui=NONE ctermfg=176 ctermbg=238 cterm=NONE
 "hi clear -- no settings --
 hi doxygenparam guifg=#fdd090 guibg=NONE guisp=NONE gui=NONE ctermfg=222 ctermbg=NONE cterm=NONE
+
+" MiniBufExpl settings
+"hi MBEVisibleActiveNormal  guibg=#cccccc guifg=NONE
+"hi MBEVisibleActiveNormal  guibg=#CCB8B8 guifg=NONE
+
+hi MBEVisibleActiveNormal guifg=#000000 guibg=#ccccee
+hi MBEVisibleActiveChanged guifg=#000000 guibg=#eecccc
+hi MBEVisibleChanged guifg=#000000 guibg=#cccccc
+hi MBEVisibleNormal guifg=#000000 guibg=#cccccc 
+hi MBEChanged guifg=#993333 guibg=#eeeeee
+hi MBENormal guifg=#333333 guibg=#eeeeee
