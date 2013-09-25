@@ -27,6 +27,9 @@ function! MyDiff()
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 
+com! LS echo system('ls')
+com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
+
 if has("gui_running")
 	set guifont=Consolas:h10
 	colorscheme custom_vivify
@@ -70,19 +73,23 @@ set scrolloff=1			" Always show at least one line above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 
+" Status line
+set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
+set laststatus=2
+
 " Key mappings
 "nnoremap <C-left> 	:tabprevious<CR>
 "nnoremap <C-right>	:tabnext<CR>
 nnoremap <C-left>	<Esc>:bprevious<CR>i
 nnoremap <C-right>	<Esc>:bnext<CR>i
 nnoremap <C-w><C-t>	:tabnew<CR>
-nnoremap <C-w><C-w>	:confirm bd<CR>
+nnoremap <Leader><Leader>	:confirm bd<CR>
 "inoremap <C-left>	<Esc>:tabprevious<CR>i
 "inoremap <C-right>	<Esc>:tabnext<CR>i
 inoremap <C-left>	<Esc>:bprevious<CR>i
 inoremap <C-right>	<Esc>:bnext<CR>i
 inoremap <C-w><C-t>	<Esc>:tabnew<CR>i
-inoremap <C-w><C-w>	<Esc>:confirm bd<CR>i
+inoremap <Leader><Leader>	<Esc>:confirm bd<CR>i
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 " inoremap <something>		<Esc>cc
@@ -92,6 +99,8 @@ nnoremap <esc> :noh<return><esc>
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
+nmap <C-n> :NERDTreeToggle<CR>
+imap <C-n> <Esc>:NERDTreeToggle<CR>
 
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
@@ -141,6 +150,8 @@ Bundle 'terryma/vim-smooth-scroll'
 Bundle 'neocomplcache'
 " Buffers as tabs
 Bundle 'fholgado/minibufexpl.vim'
+" C# syntax/highlighting
+Bundle 'OrangeT/vim-csharp'
 
 filetype plugin indent on
 syntax on
