@@ -27,8 +27,16 @@ function! MyDiff()
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 
-com! LS echo system('ls')
+function! ConEmu() 
+	" Should be more complex to find conemu
+	let cwd = getcwd()
+	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
+endfunction
+
+com! LS echo system('dir')
+com! -nargs=1 MKD call system('mkdir <args>')
 com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
+com! ConEmu call ConEmu()
 
 if has("gui_running")
 	set guifont=Consolas:h10
@@ -36,8 +44,6 @@ if has("gui_running")
 	let $COLORSCHEME=$VIMRUNTIME . '\colors\' . g:colors_name . '.vim'
 endif
 
-"set shell=C:/Windows/System32/cmd.exe
-"set shellcmdflag=/c
 set directory=$TEMP		" Temp dir
 
 set ruler				" Show cursor position at bottom
@@ -64,7 +70,7 @@ set nobackup			" No persistent backup...
 set writebackup			" But a temporary one
 set hidden				" Don't abandon hidden buffers
 set selectmode=""		" Always use visual mode, not select mode
-set nonumber			" Disable normal numbering
+set number				" Have absolute numbering at the cursor
 set relativenumber		" Number relative to the cursor
 set linebreak			" If wrapping is on, wrap at words
 set cryptmethod=blowfish	" Use strong encryption
@@ -80,16 +86,13 @@ set laststatus=2
 " Key mappings
 "nnoremap <C-left> 	:tabprevious<CR>
 "nnoremap <C-right>	:tabnext<CR>
-nnoremap <C-left>	<Esc>:bprevious<CR>i
-nnoremap <C-right>	<Esc>:bnext<CR>i
-nnoremap <C-w><C-t>	:tabnew<CR>
+nnoremap <C-left>	<Esc>:bprevious<CR>
+nnoremap <C-right>	<Esc>:bnext<CR>
 nnoremap <Leader><Leader>	:confirm bd<CR>
 "inoremap <C-left>	<Esc>:tabprevious<CR>i
 "inoremap <C-right>	<Esc>:tabnext<CR>i
 inoremap <C-left>	<Esc>:bprevious<CR>i
 inoremap <C-right>	<Esc>:bnext<CR>i
-inoremap <C-w><C-t>	<Esc>:tabnew<CR>i
-inoremap <Leader><Leader>	<Esc>:confirm bd<CR>i
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 " inoremap <something>		<Esc>cc
@@ -99,8 +102,10 @@ nnoremap <esc> :noh<return><esc>
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
-nmap <C-n> :NERDTreeToggle<CR>
-imap <C-n> <Esc>:NERDTreeToggle<CR>
+nmap <F2> :NERDTreeToggle<CR>
+imap <F2> <Esc>:NERDTreeToggle<CR>
+nmap <F3> :TlistToggle<CR>
+imap <F3> <Esc>:TlistToggle<CR>
 
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
@@ -140,8 +145,6 @@ Bundle 'hallison/vim-markdown'
 Bundle 'JavaScript-Indent'
 " Fuzzy file searching
 Bundle 'kien/ctrlp.vim'
-" Easier motions
-Bundle 'Lokaltog/vim-easymotion'
 " gof and got to open file in explorer/terminal
 Bundle  'justinmk/vim-gtfo'
 " Smooth scrolling
@@ -152,6 +155,12 @@ Bundle 'neocomplcache'
 Bundle 'fholgado/minibufexpl.vim'
 " C# syntax/highlighting
 Bundle 'OrangeT/vim-csharp'
+" Add :Rename command
+Bundle 'Rename'
+" Taglist sidebar
+Bundle 'taglist.vim'
+" Typescript syntax etc.
+Bundle 'leafgarland/typescript-vim'
 
 filetype plugin indent on
 syntax on
@@ -167,8 +176,17 @@ noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 25, 2)<CR>
 noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 25, 4)<CR>
 noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 25, 4)<CR>
 
+let Tlist_Auto_Open=1
+let Tlist_Show_One_File = 1
+let Tlist_Use_SingleClick = 1
+
 " Auto reload vimrc
 augroup reload_vimrc " {
     autocmd!
     autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END " }
+
+" Load local settings if they exist
+if filereadable($HOME . "/_vimrclocal")
+	so $HOME/_vimrclocal
+endif
