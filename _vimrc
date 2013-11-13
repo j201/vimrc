@@ -134,7 +134,7 @@ Bundle 'scrooloose/syntastic'
 " Tree file viewer
 Bundle 'scrooloose/nerdtree' 
 " JS syntax files
-Bundle 'jelera/vim-javascript-syntax' 
+" Bundle 'jelera/vim-javascript-syntax' 
 " Node repl interface
 Bundle 'intuited/vim-noderepl' 
 " Bracket manipulation
@@ -142,7 +142,9 @@ Bundle 'tpope/vim-surround'
 " Markdown syntax
 Bundle 'hallison/vim-markdown' 
 " JS Indent
-Bundle 'JavaScript-Indent'
+" Bundle 'JavaScript-Indent'
+" Trying this instead of JavaScript-Indent
+Bundle 'pangloss/vim-javascript'
 " Fuzzy file searching
 Bundle 'kien/ctrlp.vim'
 " gof and got to open file in explorer/terminal
@@ -161,6 +163,10 @@ Bundle 'Rename'
 Bundle 'taglist.vim'
 " Typescript syntax etc.
 Bundle 'leafgarland/typescript-vim'
+" Camel case motions and text objects
+Bundle 'bkad/CamelCaseMotion'
+" A better calculator
+Bundle 'arecarn/crunch'
 
 filetype plugin indent on
 syntax on
@@ -179,6 +185,10 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 25, 4)<CR>
 let Tlist_Auto_Open=1
 let Tlist_Show_One_File = 1
 let Tlist_Use_SingleClick = 1
+
+if (executable('ConEmu64.exe'))
+	nmap got :ConEmu<CR>
+endif
 
 " Auto reload vimrc
 augroup reload_vimrc " {
