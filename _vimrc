@@ -167,6 +167,8 @@ Bundle 'leafgarland/typescript-vim'
 Bundle 'bkad/CamelCaseMotion'
 " A better calculator
 Bundle 'arecarn/crunch'
+" A better way to make
+Bundle 'tpope/vim-dispatch'
 
 filetype plugin indent on
 syntax on
