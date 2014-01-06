@@ -28,7 +28,7 @@ function! MyDiff()
 endfunction
 
 function! ConEmu() 
-	" Should be more complex to find conemu
+	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
 	let cwd = getcwd()
 	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
 endfunction
@@ -37,6 +37,7 @@ com! LS echo system('dir')
 com! -nargs=1 MKD call system('mkdir <args>')
 com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
 com! ConEmu call ConEmu()
+com! -nargs=* E e <args> " Because I often press :E instead of :e
 
 if has("gui_running")
 	set guifont=Consolas:h10
@@ -78,6 +79,8 @@ set incsearch			" Start searching before pressing enter
 set scrolloff=1			" Always show at least one line above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
+set ignorecase			" Ignore case by default in searches
+set nomagic				" Don't use magic in searches by default (might break plugins)
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
@@ -106,6 +109,12 @@ nmap <F2> :NERDTreeToggle<CR>
 imap <F2> <Esc>:NERDTreeToggle<CR>
 nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
+
+" Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
+vnoremap aa :<C-U>silent! normal! ggVG<CR>
+vnoremap ia :<C-U>silent! normal! ggVG<CR>
+omap aa :normal Vaa<CR>
+omap ia :normal Via<CR>
 
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
@@ -169,6 +178,14 @@ Bundle 'bkad/CamelCaseMotion'
 Bundle 'arecarn/crunch'
 " A better way to make
 Bundle 'tpope/vim-dispatch'
+" Auto-commenting with motions
+Bundle 'tpope/vim-commentary'
+" Highlight hex colours
+Bundle 'colorizer'
+" Faster HTML editing - see http://emmet.io/
+Bundle 'mattn/emmet-vim'
+" Less syntax
+Bundle 'groenewege/vim-less'
 
 filetype plugin indent on
 syntax on
@@ -176,7 +193,10 @@ syntax on
 " Plugin settings
 let g:syntastic_javascript_checkers=['jshint']
 
+let g:ctrlp_extensions = ['buffertag']
+
 let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_min_syntax_length = 2
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 25, 2)<CR>
@@ -184,13 +204,19 @@ noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 25, 2)<CR>
 noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 25, 4)<CR>
 noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 25, 4)<CR>
 
-let Tlist_Auto_Open=1
+let Tlist_Auto_Open=0
 let Tlist_Show_One_File = 1
 let Tlist_Use_SingleClick = 1
+
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+autocmd FileType html,css imap <C-E> <C-Y>,
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>
 endif
+
+let g:colorizer_startup = 1
 
 " Auto reload vimrc
 augroup reload_vimrc " {
