@@ -42,7 +42,7 @@ com! -nargs=* E e <args> " Because I often press :E instead of :e
 if has("gui_running")
 	set guifont=Consolas:h10
 	colorscheme custom_vivify
-	let $COLORSCHEME=$VIMRUNTIME . '\colors\' . g:colors_name . '.vim'
+	let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 endif
 
 set directory=$TEMP		" Temp dir
@@ -118,9 +118,6 @@ omap ia :normal Via<CR>
 
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
-au FileType c,h setlocal cindent                            " enable the intelligent cindent (cin) feature for the following files
-au FileType java,js,javascript setlocal smartindent                    " enable the smartindenting (si) feature for the following files
-au FileType rkt,racket setlocal lisp		" lisp indentation NOTE: OVERRIDES = BEHAVIOUR
 
 au FileType txt,text,md,markdown setlocal formatoptions+=t		" autowrap
 au FileType txt,text,md,markdown setlocal wrap			" Wrap text - NOT WORKING
@@ -186,6 +183,8 @@ Bundle 'colorizer'
 Bundle 'mattn/emmet-vim'
 " Less syntax
 Bundle 'groenewege/vim-less'
+" Indent guides (<Leader>ig)
+Bundle 'nathanaelkane/vim-indent-guides'
 
 filetype plugin indent on
 syntax on
@@ -211,6 +210,12 @@ let Tlist_Use_SingleClick = 1
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
 autocmd FileType html,css imap <C-E> <C-Y>,
+
+let g:indent_guides_color_change_percent = 5
+let g:indent_guides_guide_size = 1
+
+" vim-typescript: cindent seems to break the indentation
+autocmd FileType typescript setlocal nocindent
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>

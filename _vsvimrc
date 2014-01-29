@@ -1,0 +1,102 @@
+set nocompatible
+source $VIMRUNTIME/mswin.vim
+behave mswin
+
+set diffexpr=MyDiff()
+function! MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
+
+function! ConEmu() 
+	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
+	let cwd = getcwd()
+	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
+endfunction
+
+com! LS echo system('dir')
+com! -nargs=1 MKD call system('mkdir <args>')
+com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
+com! ConEmu call ConEmu()
+com! -nargs=* E e <args> " Because I often press :E instead of :e
+
+if has("gui_running")
+	set guifont=Consolas:h10
+	colorscheme custom_vivify
+	let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
+endif
+
+set directory=$TEMP		" Temp dir
+
+set ruler				" Show cursor position at bottom
+set history=30			" Number of remembered commands
+set incsearch			" Incremental searching
+set tabstop=4			" Set tab width
+set shiftwidth=4		" Set autoindent tab width
+"set noexpandtab			" No spaces, only tabs
+set expandtab
+"set smarttab			" Tab to the correct location when pressed at the start of a line
+set autoindent			" Indents match the last line
+"set clipboard=unnamed	" Use clipboard instead of "+
+set fileformats="unix" " Use unix newlines by default in new buffers
+set guioptions-=t		" Remove tearoff menu options
+set guioptions-=T		" Hide toolbar
+set guioptions+=b		" Show bottom scrollbar
+set history=100			" Remember 100 commands
+set nowrap				" No line wrapping
+set sidescroll=5		" Set horizontal scroll when moving off screen
+set encoding=utf-8		" Unicode
+set fileencodings=ucs-bom,utf-8,ucs-2le,latin1 " Default encodings to try when opening a file
+set backspace=indent,eol,start " Allow backspacing over everything
+set shortmess+=I		" No intro message
+set nobackup			" No persistent backup...
+set writebackup			" But a temporary one
+set hidden				" Don't abandon hidden buffers
+set selectmode=""		" Always use visual mode, not select mode
+set number				" Have absolute numbering at the cursor
+set relativenumber		" Number relative to the cursor
+set linebreak			" If wrapping is on, wrap at words
+set cryptmethod=blowfish	" Use strong encryption
+set incsearch			" Start searching before pressing enter
+set scrolloff=1			" Always show at least one line above/below cursor
+set sidescrolloff=5		" Always show at least 5 columns beside cursor
+set ffs=unix,dos		" FFS, use unix line endings!
+set ignorecase			" Ignore case by default in searches
+set nomagic				" Don't use magic in searches by default (might break plugins)
+
+" Status line
+set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
+set laststatus=2
+
+" Key mappings
+nnoremap <Leader><Leader>	:x<CR>
+nnoremap <esc> :noh<return><esc>
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
+" Parse error currently
+vnoremap aa :<C-U>silent! normal! ggVG<CR>
+vnoremap ia :<C-U>silent! normal! ggVG<CR>
+omap aa :normal Vaa<CR>
+omap ia :normal Via<CR>
