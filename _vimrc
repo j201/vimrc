@@ -80,7 +80,6 @@ set scrolloff=1			" Always show at least one line above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
-set nomagic				" Don't use magic in searches by default (might break plugins)
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
@@ -109,6 +108,10 @@ nmap <F2> :NERDTreeToggle<CR>
 imap <F2> <Esc>:NERDTreeToggle<CR>
 nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
+
+" Use very nomagic by default
+:nnoremap / /\V
+:cnoremap %s/ %s/\V
 
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
@@ -216,6 +219,9 @@ let g:indent_guides_guide_size = 1
 
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
+
+" set nomagic breaks the at and it tag motions
+au FileType html,xml set magic
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>
