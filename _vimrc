@@ -38,6 +38,7 @@ com! -nargs=1 MKD call system('mkdir <args>')
 com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
 com! ConEmu call ConEmu()
 com! -nargs=* E e <args> " Because I often press :E instead of :e
+com! -nargs=1 New enew | setf <args>
 
 if has("gui_running")
 	set guifont=Consolas:h10
@@ -80,44 +81,44 @@ set scrolloff=1			" Always show at least one line above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
-
+"set nomagic				" Don't use magic in searches by default (might break plugins)
+"
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
 set laststatus=2
 
 " Key mappings
-"nnoremap <C-left> 	:tabprevious<CR>
-"nnoremap <C-right>	:tabnext<CR>
 nnoremap <C-left>	<Esc>:bprevious<CR>
 nnoremap <C-right>	<Esc>:bnext<CR>
 nnoremap <Leader><Leader>	:confirm bd<CR>
-"inoremap <C-left>	<Esc>:tabprevious<CR>i
-"inoremap <C-right>	<Esc>:tabnext<CR>i
 inoremap <C-left>	<Esc>:bprevious<CR>i
 inoremap <C-right>	<Esc>:bnext<CR>i
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
-" inoremap <something>		<Esc>cc
-nnoremap gb			^d0i<Backspace> <Esc>l	
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
 nnoremap <esc> :noh<return><esc>
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
-nmap <F2> :NERDTreeToggle<CR>
-imap <F2> <Esc>:NERDTreeToggle<CR>
 nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
 
 " Use very nomagic by default
-:nnoremap / /\V
-:cnoremap %s/ %s/\V
+nnoremap / /\V
+cnoremap s/ s/\V
+
+" Make Y go to the end of the line
+nnoremap Y y$
 
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
 vnoremap ia :<C-U>silent! normal! ggVG<CR>
 omap aa :normal Vaa<CR>
 omap ia :normal Via<CR>
+
+" Continuously indent in visual mode
+vnoremap < <gv
+vnoremap > >gv
 
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
@@ -140,8 +141,6 @@ Bundle 'tpope/vim-fireplace'
 Bundle 'guns/vim-clojure-static' 
 " Syntax checker
 Bundle 'scrooloose/syntastic' 
-" Tree file viewer
-Bundle 'scrooloose/nerdtree' 
 " JS syntax files
 " Bundle 'jelera/vim-javascript-syntax' 
 " Node repl interface
@@ -196,6 +195,8 @@ syntax on
 let g:syntastic_javascript_checkers=['jshint']
 
 let g:ctrlp_extensions = ['buffertag']
+let g:ctrlp_working_path_mode = ''
+nnoremap <Leader>o :CtrlPMRU<Esc>
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
@@ -222,6 +223,9 @@ autocmd FileType typescript setlocal nocindent
 
 " set nomagic breaks the at and it tag motions
 au FileType html,xml set magic
+
+" add more indentation in html
+:let g:html_indent_inctags = "html,body,head,tbody,li"
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>
