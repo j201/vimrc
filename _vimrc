@@ -87,18 +87,13 @@ set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings
-"nnoremap <C-left> 	:tabprevious<CR>
-"nnoremap <C-right>	:tabnext<CR>
 nnoremap <C-left>	<Esc>:bprevious<CR>
 nnoremap <C-right>	<Esc>:bnext<CR>
 nnoremap <Leader><Leader>	:confirm bd<CR>
-"inoremap <C-left>	<Esc>:tabprevious<CR>i
-"inoremap <C-right>	<Esc>:tabnext<CR>i
 inoremap <C-left>	<Esc>:bprevious<CR>i
 inoremap <C-right>	<Esc>:bnext<CR>i
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
-" inoremap <something>		<Esc>cc
 nnoremap gb			^d0i<Backspace> <Esc>l	
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
 nnoremap <esc> :noh<return><esc>
@@ -185,6 +180,10 @@ Bundle 'mattn/emmet-vim'
 Bundle 'groenewege/vim-less'
 " Indent guides (<Leader>ig)
 Bundle 'nathanaelkane/vim-indent-guides'
+" Abbreviations and substitutions that handle case and variants
+Bundle 'abolish.vim'
+" <Leader>P to preview markdown
+Bundle 'greyblake/vim-preview'
 
 filetype plugin indent on
 syntax on
@@ -193,6 +192,8 @@ syntax on
 let g:syntastic_javascript_checkers=['jshint']
 
 let g:ctrlp_extensions = ['buffertag']
+" Open CtrlP for old files
+nnoremap <Leader>o :CtrlPMRUFiles<Enter>
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
@@ -222,6 +223,9 @@ if (executable('ConEmu64.exe'))
 endif
 
 let g:colorizer_startup = 1
+
+" abbreviations
+au VimEnter Abolish hte the
 
 " Auto reload vimrc
 augroup reload_vimrc " {
