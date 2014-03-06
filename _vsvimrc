@@ -94,9 +94,7 @@ nnoremap <esc> :noh<return><esc>
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-" Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
-" Parse error currently
-vnoremap aa :<C-U>silent! normal! ggVG<CR>
-vnoremap ia :<C-U>silent! normal! ggVG<CR>
-omap aa :normal Vaa<CR>
-omap ia :normal Via<CR>
+nnoremap daa ggVGd
+nnoremap vaa ggVG
+nnoremap =aa ggVG=
+nnoremap caa ggVGc
