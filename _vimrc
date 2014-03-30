@@ -81,8 +81,7 @@ set scrolloff=1			" Always show at least one line above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
-"set nomagic				" Don't use magic in searches by default (might break plugins)
-"
+
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
 set laststatus=2
@@ -109,6 +108,7 @@ cnoremap s/ s/\V
 
 " Make Y go to the end of the line
 nnoremap Y y$
+
 
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
@@ -189,8 +189,8 @@ Bundle 'groenewege/vim-less'
 Bundle 'nathanaelkane/vim-indent-guides'
 " Abbreviations and substitutions that handle case and variants
 Bundle 'abolish.vim'
-" <Leader>P to preview markdown
-Bundle 'greyblake/vim-preview'
+" f/F but with two characters
+Bundle 'justinmk/vim-sneak'
 
 filetype plugin indent on
 syntax on
@@ -199,8 +199,8 @@ syntax on
 let g:syntastic_javascript_checkers=['jshint']
 
 let g:ctrlp_extensions = ['buffertag']
-let g:ctrlp_working_path_mode = ''
-nnoremap <Leader>o :CtrlPMRU<Esc>
+" Open CtrlP for old files
+nnoremap <Leader>o :CtrlPMRUFiles<Enter>
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
@@ -225,8 +225,6 @@ let g:indent_guides_guide_size = 1
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
 
-" set nomagic breaks the at and it tag motions
-au FileType html,xml set magic
 
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
@@ -236,6 +234,18 @@ if (executable('ConEmu64.exe'))
 endif
 
 let g:colorizer_startup = 1
+
+"Sneak key changes
+nnoremap Q m
+" 2-character Sneak (default)
+nmap m <Plug>Sneak_s
+nmap M <Plug>Sneak_S
+" visual-mode
+xmap m <Plug>Sneak_s
+xmap M <Plug>Sneak_S
+" operator-pending-mode
+omap m <Plug>Sneak_s
+omap M <Plug>Sneak_S
 
 " abbreviations
 au VimEnter Abolish hte the
