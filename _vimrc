@@ -56,7 +56,6 @@ set shiftwidth=4		" Set autoindent tab width
 set noexpandtab			" No spaces, only tabs
 "set smarttab			" Tab to the correct location when pressed at the start of a line
 set autoindent			" Indents match the last line
-"set clipboard=unnamed	" Use clipboard instead of "+
 set fileformats="unix" " Use unix newlines by default in new buffers
 set guioptions-=t		" Remove tearoff menu options
 set guioptions-=T		" Hide toolbar
@@ -101,14 +100,16 @@ nnoremap <esc> :noh<return><esc>
 inoremap <C-U> <C-G>u<C-U>
 nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
+nmap Q <nop> 
+" I should find a use for Q
 
 " Use very nomagic by default
 nnoremap / /\V
-cnoremap s/ s/\V
+nnoremap :s/ :s/\V
+nnoremap :%s/ :%s/\V
 
-" Make Y go to the end of the line
+" Make Y yank to the end of the line
 nnoremap Y y$
-
 
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
@@ -179,8 +180,8 @@ Bundle 'arecarn/crunch'
 Bundle 'tpope/vim-dispatch'
 " Auto-commenting with motions
 Bundle 'tpope/vim-commentary'
-" Highlight hex colours
-Bundle 'colorizer'
+" Highlight css colours
+Bundle 'ap/vim-css-color'
 " Faster HTML editing - see http://emmet.io/
 Bundle 'mattn/emmet-vim'
 " Less syntax
@@ -225,7 +226,6 @@ let g:indent_guides_guide_size = 1
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
 
-
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
 
@@ -248,7 +248,7 @@ omap m <Plug>Sneak_s
 omap M <Plug>Sneak_S
 
 " abbreviations
-au VimEnter Abolish hte the
+au User AfterBundles Abolish hte the
 
 " Auto reload vimrc
 augroup reload_vimrc " {
