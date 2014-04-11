@@ -102,13 +102,17 @@ inoremap <C-U> <C-G>u<C-U>
 nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
 
-" Use very nomagic by default
+" Use very nomagic by default - kinda hackish and a bit annoying
 nnoremap / /\V
-cnoremap s/ s/\V
+nnoremap :s/ :s/\V
+nnoremap :%s/ :%s/\V
+vnoremap :s/ :s/\V
 
 " Make Y go to the end of the line
 nnoremap Y y$
 
+" Edit vimrc
+nnoremap <Leader>v :e $MYVIMRC<CR>
 
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
@@ -189,8 +193,8 @@ Bundle 'groenewege/vim-less'
 Bundle 'nathanaelkane/vim-indent-guides'
 " Abbreviations and substitutions that handle case and variants
 Bundle 'abolish.vim'
-" f/F but with two characters
-Bundle 'justinmk/vim-sneak'
+" Lisp editing
+Bundle 'paredit.vim'
 
 filetype plugin indent on
 syntax on
@@ -225,6 +229,10 @@ let g:indent_guides_guide_size = 1
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
 
+" paredit options
+let g:paredit_mode = 0
+let g:paredit_leader = ','
+" run call PareditInitBuffer() to start it
 
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
@@ -234,18 +242,6 @@ if (executable('ConEmu64.exe'))
 endif
 
 let g:colorizer_startup = 1
-
-"Sneak key changes
-nnoremap Q m
-" 2-character Sneak (default)
-nmap m <Plug>Sneak_s
-nmap M <Plug>Sneak_S
-" visual-mode
-xmap m <Plug>Sneak_s
-xmap M <Plug>Sneak_S
-" operator-pending-mode
-omap m <Plug>Sneak_s
-omap M <Plug>Sneak_S
 
 " abbreviations
 au VimEnter Abolish hte the
