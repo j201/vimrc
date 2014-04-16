@@ -115,6 +115,9 @@ nnoremap Y y$
 " Edit vimrc
 nnoremap <Leader>v :e $MYVIMRC<CR>
 
+" Replace word under cursor
+nnoremap <Leader>r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
+
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
 vnoremap ia :<C-U>silent! normal! ggVG<CR>
