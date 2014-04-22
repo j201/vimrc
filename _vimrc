@@ -80,6 +80,7 @@ set scrolloff=1			" Always show at least one line above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
+set spelllang=en_ca		" Rocks and trees and trees and rocks...
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
@@ -88,7 +89,6 @@ set laststatus=2
 " Key mappings
 nnoremap <C-left>	<Esc>:bprevious<CR>
 nnoremap <C-right>	<Esc>:bnext<CR>
-nnoremap <Leader><Leader>	:confirm bd<CR>
 inoremap <C-left>	<Esc>:bprevious<CR>i
 inoremap <C-right>	<Esc>:bnext<CR>i
 nnoremap <C-s>		:w!<CR>
@@ -112,12 +112,6 @@ vnoremap :s/ :s/\V
 " Make Y yank to the end of the line
 nnoremap Y y$
 
-" Edit vimrc
-nnoremap <Leader>v :e $MYVIMRC<CR>
-
-" Replace word under cursor
-nnoremap <Leader>r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
-
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
 vnoremap ia :<C-U>silent! normal! ggVG<CR>
@@ -127,6 +121,15 @@ omap ia :normal Via<CR>
 " Continuously indent in visual mode
 vnoremap < <gv
 vnoremap > >gv
+
+" Leader commands - file management and temporary commands
+nnoremap <Leader><Leader>	:confirm bd<CR>
+nnoremap <Leader>v :e $MYVIMRC<CR>
+
+" Comma commands - editing
+nnoremap ,c :Crunch 
+" Replace word under cursor
+nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
 
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
@@ -143,6 +146,8 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " My bundles
+" Buffers as tabs, forked from fholgado
+Bundle 'j201/minibufexpl.vim'
 " Clojure quasi-repl
 Bundle 'tpope/vim-fireplace' 
 " Clojure runtime files
@@ -169,8 +174,6 @@ Bundle  'justinmk/vim-gtfo'
 Bundle 'terryma/vim-smooth-scroll'
 " Automatically load autocomplete menu
 Bundle 'neocomplcache'
-" Buffers as tabs
-Bundle 'fholgado/minibufexpl.vim'
 " C# syntax/highlighting
 Bundle 'OrangeT/vim-csharp'
 " Add :Rename command
