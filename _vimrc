@@ -42,9 +42,17 @@ com! -nargs=1 New enew | setf <args>
 
 if has("gui_running")
 	set guifont=Consolas:h10
-	colorscheme custom_vivify
-	let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 endif
+
+if !empty($CONEMUBUILD)
+  set term=xterm
+  set t_Co=256
+  let &t_AB="\e[48;5;%dm"
+  let &t_AF="\e[38;5;%dm"
+endif 
+
+colorscheme custom_vivify
+let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 
 set directory=$TEMP		" Temp dir
 
@@ -202,6 +210,8 @@ Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'abolish.vim'
 " Lisp editing
 Bundle 'paredit.vim'
+" Fix colorschemes for the terminal
+Bundle 'CSApprox'
 
 filetype plugin indent on
 syntax on
