@@ -44,7 +44,7 @@ if has("gui_running")
 	set guifont=Consolas:h10
 endif
 
-if !empty($CONEMUBUILD)
+if !has("gui_running") && !empty($CONEMUBUILD)
   set term=xterm
   set t_Co=256
   let &t_AB="\e[48;5;%dm"
@@ -110,6 +110,8 @@ nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
 nmap Q <nop> 
 " I should find a use for Q
+" Use <C-G><char> for greek character
+inoremap <C-G> <C-K>*
 
 " Use very nomagic by default - kinda hackish and a bit annoying
 nnoremap / /\V
@@ -247,8 +249,9 @@ let g:indent_guides_guide_size = 1
 autocmd FileType typescript setlocal nocindent
 
 " paredit options
-let g:paredit_mode = 0
+" let g:paredit_mode = 0
 let g:paredit_leader = ','
+let g:paredit_electric_return = 0
 " run call PareditInitBuffer() to start it
 
 " add more indentation in html
