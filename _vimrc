@@ -249,9 +249,9 @@ let g:indent_guides_guide_size = 1
 autocmd FileType typescript setlocal nocindent
 
 " paredit options
-" let g:paredit_mode = 0
 let g:paredit_leader = ','
 let g:paredit_electric_return = 0
+autocmd FileType clojure nmap ,i ,Wa
 " run call PareditInitBuffer() to start it
 
 " add more indentation in html
