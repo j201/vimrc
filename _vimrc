@@ -89,6 +89,8 @@ set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
 set spelllang=en_ca		" Rocks and trees and trees and rocks...
+set autoread			" Autoreload files changed externally
+set formatoptions-=ro	" Don't repeat comment leaders
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
@@ -112,6 +114,10 @@ nmap Q <nop>
 " I should find a use for Q
 " Use <C-G><char> for greek character
 inoremap <C-G> <C-K>*
+" Reset the behaviour of <C-Y>
+noremap <C-Y> <C-Y>
+" Reset the behaviour of <C-A>
+noremap <C-A> <C-A>
 
 " Use very nomagic by default - kinda hackish and a bit annoying
 nnoremap / /\V
@@ -224,6 +230,7 @@ let g:syntastic_javascript_checkers=['jshint']
 let g:ctrlp_extensions = ['buffertag']
 " Open CtrlP for old files
 nnoremap <Leader>o :CtrlPMRUFiles<Enter>
+let g:ctrlp_custom_ignore='target'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
