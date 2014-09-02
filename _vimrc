@@ -231,6 +231,7 @@ nnoremap <Leader>o :CtrlPMRUFiles<Enter>
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><CR>  neocomplcache#close_popup()."\<CR>"
 
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 25, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 25, 2)<CR>
