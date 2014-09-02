@@ -27,7 +27,7 @@ function! MyDiff()
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 
-function! ConEmu() 
+function! ConEmu()
 	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
 	let cwd = getcwd()
 	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
@@ -49,7 +49,7 @@ if !has("gui_running") && !empty($CONEMUBUILD)
   set t_Co=256
   let &t_AB="\e[48;5;%dm"
   let &t_AF="\e[38;5;%dm"
-endif 
+endif
 
 colorscheme custom_vivify
 let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
@@ -89,8 +89,6 @@ set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
 set spelllang=en_ca		" Rocks and trees and trees and rocks...
-set autoread			" Autoreload files changed externally
-set formatoptions-=ro	" Don't repeat comment leaders
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
@@ -114,10 +112,6 @@ nmap Q <nop>
 " I should find a use for Q
 " Use <C-G><char> for greek character
 inoremap <C-G> <C-K>*
-" Reset the behaviour of <C-Y>
-noremap <C-Y> <C-Y>
-" Reset the behaviour of <C-A>
-noremap <C-A> <C-A>
 
 " Use very nomagic by default - kinda hackish and a bit annoying
 nnoremap / /\V
@@ -163,7 +157,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " My bundles
 " Buffers as tabs, forked from fholgado
-Plugin 'j201/minibufexpl.vim'
+" Plugin 'j201/minibufexpl.vim'
+Plugin 'bling/vim-airline'
 " Clojure quasi-repl
 Plugin 'tpope/vim-fireplace' 
 " Clojure runtime files
@@ -228,12 +223,19 @@ filetype plugin indent on
 syntax on
 
 " Plugin settings
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline_section_b = ''
+let g:airline_section_c = '%.50F%m  %y    cwd:%{getcwd()}'
+let g:airline_section_z = '%=line:%l/%L  col:%c'
+let g:airline_section_warning = ''
+let g:airline_theme = 'molokai'
+
 let g:syntastic_javascript_checkers=['jshint']
 
 let g:ctrlp_extensions = ['buffertag']
 " Open CtrlP for old files
 nnoremap <Leader>o :CtrlPMRUFiles<Enter>
-let g:ctrlp_custom_ignore='target'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
