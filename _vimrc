@@ -97,10 +97,6 @@ set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings
-" nnoremap <C-left>	<Esc>:MBEbp<CR>
-" nnoremap <C-right>	<Esc>:MBEbn<CR>
-" inoremap <C-left>	<Esc>:MBEbp<CR>i
-" inoremap <C-right>	<Esc>:MBEbn<CR>i
 nnoremap <C-left>	<Esc>:bp<CR>
 nnoremap <C-right>	<Esc>:bn<CR>
 inoremap <C-left>	<Esc>:bp<CR>i
@@ -164,70 +160,73 @@ au GUIEnter * simalt ~x " Open maximized
 au VimLeave * mksession! ~/.vim/_session
 
 " Vundle stuff
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
-Bundle 'gmarik/vundle'
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
 
 " My bundles
 " Buffers as tabs, forked from fholgado
-Bundle 'j201/minibufexpl.vim'
+Plugin 'j201/minibufexpl.vim'
 " Clojure quasi-repl
-Bundle 'tpope/vim-fireplace' 
+Plugin 'tpope/vim-fireplace'
 " Clojure runtime files
-Bundle 'guns/vim-clojure-static' 
+Plugin 'guns/vim-clojure-static'
 " Syntax checker
-Bundle 'scrooloose/syntastic' 
+Plugin 'scrooloose/syntastic'
 " JS syntax files
-" Bundle 'jelera/vim-javascript-syntax' 
+" Plugin 'jelera/vim-javascript-syntax'
 " Node repl interface
-Bundle 'intuited/vim-noderepl' 
+Plugin 'intuited/vim-noderepl'
 " Bracket manipulation
-Bundle 'tpope/vim-surround' 
+Plugin 'tpope/vim-surround'
 " Markdown syntax
-Bundle 'hallison/vim-markdown' 
+Plugin 'hallison/vim-markdown'
 " JS Indent
-" Bundle 'JavaScript-Indent'
+" Plugin 'JavaScript-Indent'
 " Trying this instead of JavaScript-Indent
-Bundle 'pangloss/vim-javascript'
+Plugin 'pangloss/vim-javascript'
 " Fuzzy file searching
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 " gof and got to open file in explorer/terminal
-Bundle  'justinmk/vim-gtfo'
+Plugin 'justinmk/vim-gtfo'
 " Smooth scrolling
-Bundle 'terryma/vim-smooth-scroll'
+Plugin 'terryma/vim-smooth-scroll'
 " Automatically load autocomplete menu
-Bundle 'neocomplcache'
+Plugin 'neocomplcache'
 " C# syntax/highlighting
-Bundle 'OrangeT/vim-csharp'
+Plugin 'OrangeT/vim-csharp'
 " Add :Rename command
-Bundle 'Rename'
+Plugin 'Rename'
 " Taglist sidebar
-Bundle 'taglist.vim'
+Plugin 'taglist.vim'
 " Typescript syntax etc.
-Bundle 'leafgarland/typescript-vim'
+Plugin 'leafgarland/typescript-vim'
 " Camel case motions and text objects
-Bundle 'bkad/CamelCaseMotion'
+Plugin 'bkad/CamelCaseMotion'
 " A better calculator
-Bundle 'arecarn/crunch'
+Plugin 'arecarn/crunch'
 " A better way to make
-Bundle 'tpope/vim-dispatch'
+Plugin 'tpope/vim-dispatch'
 " Auto-commenting with motions
-Bundle 'tpope/vim-commentary'
+Plugin 'tpope/vim-commentary'
 " Highlight css colours
-Bundle 'ap/vim-css-color'
+Plugin 'ap/vim-css-color'
 " Faster HTML editing - see http://emmet.io/
-Bundle 'mattn/emmet-vim'
+Plugin 'mattn/emmet-vim'
 " Less syntax
-Bundle 'groenewege/vim-less'
+Plugin 'groenewege/vim-less'
 " Indent guides (<Leader>ig)
-Bundle 'nathanaelkane/vim-indent-guides'
+Plugin 'nathanaelkane/vim-indent-guides'
 " Abbreviations and substitutions that handle case and variants
-Bundle 'abolish.vim'
+Plugin 'abolish.vim'
 " Lisp editing
-Bundle 'paredit.vim'
+Plugin 'paredit.vim'
 " Fix colorschemes for the terminal
-Bundle 'CSApprox'
+Plugin 'CSApprox'
+" Git gutter indicators
+Plugin 'airblade/vim-gitgutter'
 
+call vundle#end()
 filetype plugin indent on
 syntax on
 
@@ -270,7 +269,7 @@ autocmd FileType typescript setlocal nocindent
 let g:paredit_leader = ','
 let g:paredit_electric_return = 0
 autocmd FileType clojure nmap ,i ,Wa
-" run call PareditInitBuffer() to start it
+autocmd FileType clojure vmap ,i ,Wa
 
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
