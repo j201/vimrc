@@ -97,10 +97,14 @@ set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings
-nnoremap <C-left>	<Esc>:bprevious<CR>
-nnoremap <C-right>	<Esc>:bnext<CR>
-inoremap <C-left>	<Esc>:bprevious<CR>i
-inoremap <C-right>	<Esc>:bnext<CR>i
+" nnoremap <C-left>	<Esc>:MBEbp<CR>
+" nnoremap <C-right>	<Esc>:MBEbn<CR>
+" inoremap <C-left>	<Esc>:MBEbp<CR>i
+" inoremap <C-right>	<Esc>:MBEbn<CR>i
+nnoremap <C-left>	<Esc>:bp<CR>
+nnoremap <C-right>	<Esc>:bn<CR>
+inoremap <C-left>	<Esc>:bp<CR>i
+inoremap <C-right>	<Esc>:bn<CR>i
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
@@ -147,6 +151,9 @@ nnoremap ,c :Crunch
 " Replace word under cursor
 nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
 
+" Custom digraphs
+:digr E# 8707 A# 8704 d# 8705 s# 8747
+
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
 
@@ -157,87 +164,88 @@ au GUIEnter * simalt ~x " Open maximized
 au VimLeave * mksession! ~/.vim/_session
 
 " Vundle stuff
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim'
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+Bundle 'gmarik/vundle'
 
 " My bundles
 " Buffers as tabs, forked from fholgado
-Plugin 'j201/minibufexpl.vim'
+Bundle 'j201/minibufexpl.vim'
 " Clojure quasi-repl
-Plugin 'tpope/vim-fireplace' 
+Bundle 'tpope/vim-fireplace' 
 " Clojure runtime files
-Plugin 'guns/vim-clojure-static' 
+Bundle 'guns/vim-clojure-static' 
 " Syntax checker
-Plugin 'scrooloose/syntastic' 
+Bundle 'scrooloose/syntastic' 
 " JS syntax files
-" Plugin 'jelera/vim-javascript-syntax' 
+" Bundle 'jelera/vim-javascript-syntax' 
 " Node repl interface
-Plugin 'intuited/vim-noderepl' 
+Bundle 'intuited/vim-noderepl' 
 " Bracket manipulation
-Plugin 'tpope/vim-surround' 
+Bundle 'tpope/vim-surround' 
 " Markdown syntax
-Plugin 'hallison/vim-markdown' 
+Bundle 'hallison/vim-markdown' 
 " JS Indent
-" Plugin 'JavaScript-Indent'
+" Bundle 'JavaScript-Indent'
 " Trying this instead of JavaScript-Indent
-Plugin 'pangloss/vim-javascript'
+Bundle 'pangloss/vim-javascript'
 " Fuzzy file searching
-Plugin 'kien/ctrlp.vim'
+Bundle 'kien/ctrlp.vim'
 " gof and got to open file in explorer/terminal
-Plugin  'justinmk/vim-gtfo'
+Bundle  'justinmk/vim-gtfo'
 " Smooth scrolling
-Plugin 'terryma/vim-smooth-scroll'
+Bundle 'terryma/vim-smooth-scroll'
 " Automatically load autocomplete menu
-Plugin 'neocomplcache'
+Bundle 'neocomplcache'
 " C# syntax/highlighting
-Plugin 'OrangeT/vim-csharp'
+Bundle 'OrangeT/vim-csharp'
 " Add :Rename command
-Plugin 'Rename'
+Bundle 'Rename'
 " Taglist sidebar
-Plugin 'taglist.vim'
+Bundle 'taglist.vim'
 " Typescript syntax etc.
-Plugin 'leafgarland/typescript-vim'
+Bundle 'leafgarland/typescript-vim'
 " Camel case motions and text objects
-Plugin 'bkad/CamelCaseMotion'
+Bundle 'bkad/CamelCaseMotion'
 " A better calculator
-Plugin 'arecarn/crunch'
+Bundle 'arecarn/crunch'
 " A better way to make
-Plugin 'tpope/vim-dispatch'
+Bundle 'tpope/vim-dispatch'
 " Auto-commenting with motions
-Plugin 'tpope/vim-commentary'
+Bundle 'tpope/vim-commentary'
 " Highlight css colours
-Plugin 'ap/vim-css-color'
+Bundle 'ap/vim-css-color'
 " Faster HTML editing - see http://emmet.io/
-Plugin 'mattn/emmet-vim'
+Bundle 'mattn/emmet-vim'
 " Less syntax
-Plugin 'groenewege/vim-less'
+Bundle 'groenewege/vim-less'
 " Indent guides (<Leader>ig)
-Plugin 'nathanaelkane/vim-indent-guides'
+Bundle 'nathanaelkane/vim-indent-guides'
 " Abbreviations and substitutions that handle case and variants
-Plugin 'abolish.vim'
+Bundle 'abolish.vim'
 " Lisp editing
-Plugin 'paredit.vim'
+Bundle 'paredit.vim'
 " Fix colorschemes for the terminal
-Plugin 'CSApprox'
-" Git gutter indicators
-Plugin 'airblade/vim-gitgutter'
+Bundle 'CSApprox'
 
-call vundle#end()
 filetype plugin indent on
 syntax on
 
 " Plugin settings
+let g:miniBufExplSortBy="number"
+
 let g:syntastic_javascript_checkers=['jshint']
 
+let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_extensions = ['buffertag']
 " Open CtrlP for old files
 nnoremap <Leader>o :CtrlPMRUFiles<Enter>
-let g:ctrlp_custom_ignore='target'
+let g:ctrlp_custom_ignore='\v[\/](node_modules|target)$'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><CR> neocomplcache#close_popup()."\<CR>"
 
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 25, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 25, 2)<CR>
@@ -262,7 +270,7 @@ autocmd FileType typescript setlocal nocindent
 let g:paredit_leader = ','
 let g:paredit_electric_return = 0
 autocmd FileType clojure nmap ,i ,Wa
-autocmd FileType clojure vmap ,i ,Wa
+" run call PareditInitBuffer() to start it
 
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
