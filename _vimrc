@@ -90,7 +90,9 @@ set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
 set spelllang=en_ca		" Rocks and trees and trees and rocks...
 set autoread			" Autoreload files changed externally
-set formatoptions-=ro	" Don't repeat comment leaders
+set formatoptions-=r	" Don't repeat comment leaders
+set formatoptions-=c	" Don't repeat comment leaders
+set formatoptions-=o	" Don't repeat comment leaders
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
@@ -223,8 +225,6 @@ Plugin 'abolish.vim'
 Plugin 'paredit.vim'
 " Fix colorschemes for the terminal
 Plugin 'CSApprox'
-" Git gutter indicators
-Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 filetype plugin indent on
@@ -264,6 +264,9 @@ let g:indent_guides_guide_size = 1
 
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
+
+autocmd FileType json nnoremap ,f :%!python -m json.tool<CR>
+autocmd FileType json set syntax=javascript
 
 " paredit options
 let g:paredit_leader = ','
