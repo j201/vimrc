@@ -265,6 +265,8 @@ let g:indent_guides_guide_size = 1
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
 
+autocmd FileType haskell setlocal expandtab
+
 autocmd FileType json nnoremap ,f :%!python -m json.tool<CR>
 autocmd FileType json set syntax=javascript
 
