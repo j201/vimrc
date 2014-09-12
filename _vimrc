@@ -152,6 +152,10 @@ nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
 " Custom digraphs
 :digr E# 8707 A# 8704 d# 8705 s# 8747
 
+" Add j/k to jumplist
+:nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'k'<CR>
+:nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'j'<CR>
+
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
 
