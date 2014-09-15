@@ -27,7 +27,7 @@ function! MyDiff()
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 
-function! ConEmu()
+function! ConEmu() 
 	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
 	let cwd = getcwd()
 	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
@@ -49,7 +49,7 @@ if !has("gui_running") && !empty($CONEMUBUILD)
   set t_Co=256
   let &t_AB="\e[48;5;%dm"
   let &t_AF="\e[38;5;%dm"
-endif
+endif 
 
 colorscheme custom_vivify
 let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
@@ -89,16 +89,20 @@ set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
 set spelllang=en_ca		" Rocks and trees and trees and rocks...
+set autoread			" Autoreload files changed externally
+set formatoptions-=r	" Don't repeat comment leaders
+set formatoptions-=c	" Don't repeat comment leaders
+set formatoptions-=o	" Don't repeat comment leaders
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
 set laststatus=2
 
 " Key mappings
-nnoremap <C-left>	<Esc>:bprevious<CR>
-nnoremap <C-right>	<Esc>:bnext<CR>
-inoremap <C-left>	<Esc>:bprevious<CR>i
-inoremap <C-right>	<Esc>:bnext<CR>i
+nnoremap <C-left>	<Esc>:bp<CR>
+nnoremap <C-right>	<Esc>:bn<CR>
+inoremap <C-left>	<Esc>:bp<CR>i
+inoremap <C-right>	<Esc>:bn<CR>i
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
@@ -112,6 +116,10 @@ nmap Q <nop>
 " I should find a use for Q
 " Use <C-G><char> for greek character
 inoremap <C-G> <C-K>*
+" Reset the behaviour of <C-Y>
+noremap <C-Y> <C-Y>
+" Reset the behaviour of <C-A>
+noremap <C-A> <C-A>
 
 " Use very nomagic by default - kinda hackish and a bit annoying
 nnoremap / /\V
@@ -141,6 +149,13 @@ nnoremap ,c :Crunch
 " Replace word under cursor
 nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
 
+" Custom digraphs
+:digr E# 8707 A# 8704 d# 8705 s# 8747
+
+" Add j/k to jumplist
+:nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'k'<CR>
+:nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'j'<CR>
+
 " File local settings
 set nocindent " No C indentation by default - it seems to break smartindent
 
@@ -160,19 +175,19 @@ Plugin 'gmarik/Vundle.vim'
 " Plugin 'j201/minibufexpl.vim'
 Plugin 'bling/vim-airline'
 " Clojure quasi-repl
-Plugin 'tpope/vim-fireplace' 
+Plugin 'tpope/vim-fireplace'
 " Clojure runtime files
-Plugin 'guns/vim-clojure-static' 
+Plugin 'guns/vim-clojure-static'
 " Syntax checker
-Plugin 'scrooloose/syntastic' 
+Plugin 'scrooloose/syntastic'
 " JS syntax files
-" Plugin 'jelera/vim-javascript-syntax' 
+" Plugin 'jelera/vim-javascript-syntax'
 " Node repl interface
-Plugin 'intuited/vim-noderepl' 
+Plugin 'intuited/vim-noderepl'
 " Bracket manipulation
-Plugin 'tpope/vim-surround' 
+Plugin 'tpope/vim-surround'
 " Markdown syntax
-Plugin 'hallison/vim-markdown' 
+Plugin 'hallison/vim-markdown'
 " JS Indent
 " Plugin 'JavaScript-Indent'
 " Trying this instead of JavaScript-Indent
@@ -180,7 +195,7 @@ Plugin 'pangloss/vim-javascript'
 " Fuzzy file searching
 Plugin 'kien/ctrlp.vim'
 " gof and got to open file in explorer/terminal
-Plugin  'justinmk/vim-gtfo'
+Plugin 'justinmk/vim-gtfo'
 " Smooth scrolling
 Plugin 'terryma/vim-smooth-scroll'
 " Automatically load autocomplete menu
@@ -215,8 +230,6 @@ Plugin 'abolish.vim'
 Plugin 'paredit.vim'
 " Fix colorschemes for the terminal
 Plugin 'CSApprox'
-" Git gutter indicators
-" Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 filetype plugin indent on
@@ -226,21 +239,25 @@ syntax on
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_section_b = ''
-let g:airline_section_c = '%.50F%m  %y    cwd:%{getcwd()}'
-let g:airline_section_z = '%=line:%l/%L  col:%c'
+let g:airline_section_c = '%.50F%m %y cwd:%{getcwd()}'
+let g:airline_section_z = '%=line:%l/%L col:%c'
 let g:airline_section_warning = ''
 let g:airline_theme = 'molokai'
 
+let g:miniBufExplSortBy="number"
+
 let g:syntastic_javascript_checkers=['jshint']
 
+let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_extensions = ['buffertag']
 " Open CtrlP for old files
 nnoremap <Leader>o :CtrlPMRUFiles<Enter>
+let g:ctrlp_custom_ignore='\v[\/](node_modules|target)$'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><CR>  neocomplcache#close_popup()."\<CR>"
+inoremap <expr><CR> neocomplcache#close_popup()."\<CR>"
 
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 25, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 25, 2)<CR>
@@ -260,6 +277,11 @@ let g:indent_guides_guide_size = 1
 
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
+
+autocmd FileType haskell setlocal expandtab
+
+autocmd FileType json nnoremap ,f :%!python -m json.tool<CR>
+autocmd FileType json set syntax=javascript
 
 " paredit options
 let g:paredit_leader = ','
