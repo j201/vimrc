@@ -216,7 +216,7 @@ Plugin 'paredit.vim'
 " Fix colorschemes for the terminal
 Plugin 'CSApprox'
 " Git gutter indicators
-Plugin 'airblade/vim-gitgutter'
+" Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 filetype plugin indent on
@@ -269,6 +269,8 @@ autocmd FileType clojure vmap ,i ,Wa
 
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
+
+autocmd FileType haskell setlocal expandtab
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>
