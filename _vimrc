@@ -238,6 +238,7 @@ syntax on
 let g:miniBufExplSortBy="number"
 
 let g:syntastic_javascript_checkers=['jshint']
+let g:syntastic_typescript_tsc_args='--target ES5 --module commonjs'
 
 let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_extensions = ['buffertag']
