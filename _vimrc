@@ -1,7 +1,10 @@
+" vim set foldmarker={{{,}}}
+
 set nocompatible
 source $VIMRUNTIME/mswin.vim
 behave mswin
 
+" MyDiff function"{{{
 set diffexpr=MyDiff()
 function! MyDiff()
   let opt = '-a --binary '
@@ -26,6 +29,7 @@ function! MyDiff()
   endif
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
+"}}}
 
 function! ConEmu() 
 	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
@@ -33,12 +37,14 @@ function! ConEmu()
 	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
 endfunction
 
+" Commands"{{{
 com! LS echo system('dir')
 com! -nargs=1 MKD call system('mkdir <args>')
 com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
 com! ConEmu call ConEmu()
 com! -nargs=* E e <args> " Because I often press :E instead of :e
 com! -nargs=1 New enew | setf <args>
+"}}}
 
 if has("gui_running")
 	set guifont=Consolas:h10
@@ -54,8 +60,8 @@ endif
 colorscheme custom_vivify
 let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 
+" `set` settings"{{{
 set directory=$TEMP		" Temp dir
-
 set ruler				" Show cursor position at bottom
 set history=30			" Number of remembered commands
 set incsearch			" Incremental searching
@@ -84,7 +90,7 @@ set relativenumber		" Number relative to the cursor
 set linebreak			" If wrapping is on, wrap at words
 set cryptmethod=blowfish	" Use strong encryption
 set incsearch			" Start searching before pressing enter
-set scrolloff=1			" Always show at least one line above/below cursor
+set scrolloff=10		" Always show at least ten lines above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
@@ -93,12 +99,14 @@ set autoread			" Autoreload files changed externally
 set formatoptions-=r	" Don't repeat comment leaders
 set formatoptions-=c	" Don't repeat comment leaders
 set formatoptions-=o	" Don't repeat comment leaders
+set viewdir=~/.vim/view " Set view folder
+"}}}
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
 set laststatus=2
 
-" Key mappings
+" Key mappings "{{{
 nnoremap <C-left>	<Esc>:bp<CR>
 nnoremap <C-right>	<Esc>:bn<CR>
 inoremap <C-left>	<Esc>:bp<CR>i
@@ -107,17 +115,23 @@ nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
 nnoremap <esc> :noh<return><esc>
+
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
+
 nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
+
 nmap Q <nop> 
 " I should find a use for Q
+
 " Use <C-G><char> for greek character
 inoremap <C-G> <C-K>*
+
 " Reset the behaviour of <C-Y>
 noremap <C-Y> <C-Y>
+
 " Reset the behaviour of <C-A>
 noremap <C-A> <C-A>
 
@@ -146,26 +160,28 @@ nnoremap <Leader>v :e $MYVIMRC<CR>
 
 " Comma commands - editing
 nnoremap ,c :Crunch 
+
 " Replace word under cursor
 nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
+
+" Add j/k to jumplist
+nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'k'<CR>
+nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'j'<CR>
+"}}}
 
 " Custom digraphs
 :digr E# 8707 A# 8704 d# 8705 s# 8747
 
-" Add j/k to jumplist
-:nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'k'<CR>
-:nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'j'<CR>
-
-" File local settings
+" File local settings"{{{
 set nocindent " No C indentation by default - it seems to break smartindent
 
 au FileType txt,text,md,markdown setlocal formatoptions+=t		" autowrap
 au FileType txt,text,md,markdown setlocal wrap			" Wrap text - NOT WORKING
 
 au GUIEnter * simalt ~x " Open maximized
-au VimLeave * mksession! ~/.vim/_session
+au VimLeave * mksession! ~/.vim/_session"}}}
 
-" Vundle stuff
+" Vundle stuff"{{{
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
@@ -233,8 +249,9 @@ Plugin 'CSApprox'
 call vundle#end()
 filetype plugin indent on
 syntax on
+"}}}
 
-" Plugin settings
+" Plugin settings"{{{
 let g:miniBufExplSortBy="number"
 
 let g:syntastic_javascript_checkers=['jshint']
@@ -283,6 +300,7 @@ autocmd FileType clojure vmap ,i ,Wa
 
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
+"}}}
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>
@@ -292,6 +310,10 @@ let g:colorizer_startup = 1
 
 " abbreviations
 au User AfterBundles Abolish hte the
+
+" Save folds
+au BufWinLeave ?* mkview
+au BufWinEnter ?* silent loadview
 
 " Auto reload vimrc
 augroup reload_vimrc " {
