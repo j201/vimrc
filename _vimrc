@@ -188,7 +188,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " My bundles
 " Buffers as tabs, forked from fholgado
-Plugin 'j201/minibufexpl.vim'
+" Plugin 'j201/minibufexpl.vim'
+Plugin 'bling/vim-airline'
 " Clojure quasi-repl
 Plugin 'tpope/vim-fireplace'
 " Clojure runtime files
@@ -252,6 +253,14 @@ syntax on
 "}}}
 
 " Plugin settings"{{{
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline_section_b = ''
+let g:airline_section_c = '%.50F%m %y cwd:%{getcwd()}'
+let g:airline_section_z = '%=line:%l/%L col:%c'
+let g:airline_section_warning = ''
+let g:airline_theme = 'molokai'
+
 let g:miniBufExplSortBy="number"
 
 let g:syntastic_javascript_checkers=['jshint']
@@ -301,6 +310,8 @@ autocmd FileType clojure vmap ,i ,Wa
 " add more indentation in html
 :let g:html_indent_inctags = "html,body,head,tbody,li"
 "}}}
+
+autocmd FileType haskell setlocal expandtab
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>
