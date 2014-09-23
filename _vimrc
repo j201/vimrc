@@ -34,7 +34,7 @@ endfunction
 function! ConEmu() 
 	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
 	let cwd = getcwd()
-	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
+	execute '!start ConEmu64.exe /dir "' . escape(cwd, '\') . '"'
 endfunction
 
 " Commands"{{{
@@ -260,6 +260,7 @@ let g:airline_section_c = '%.50F%m %y cwd:%{getcwd()}'
 let g:airline_section_z = '%=line:%l/%L col:%c'
 let g:airline_section_warning = ''
 let g:airline_theme = 'molokai'
+let g:airline_powerline_fonts = 1
 
 let g:miniBufExplSortBy="number"
 
