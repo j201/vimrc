@@ -187,8 +187,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " My bundles
-" Buffers as tabs, forked from fholgado
-" Plugin 'j201/minibufexpl.vim'
+" Pretty status line and more importantly, buffer line
 Plugin 'bling/vim-airline'
 " Clojure quasi-repl
 Plugin 'tpope/vim-fireplace'
@@ -196,16 +195,12 @@ Plugin 'tpope/vim-fireplace'
 Plugin 'guns/vim-clojure-static'
 " Syntax checker
 Plugin 'scrooloose/syntastic'
-" JS syntax files
-" Plugin 'jelera/vim-javascript-syntax'
 " Node repl interface
 Plugin 'intuited/vim-noderepl'
 " Bracket manipulation
 Plugin 'tpope/vim-surround'
 " Markdown syntax
 Plugin 'hallison/vim-markdown'
-" JS Indent
-" Plugin 'JavaScript-Indent'
 " Trying this instead of JavaScript-Indent
 Plugin 'pangloss/vim-javascript'
 " Fuzzy file searching
@@ -220,14 +215,10 @@ Plugin 'neocomplcache'
 Plugin 'OrangeT/vim-csharp'
 " Add :Rename command
 Plugin 'Rename'
-" Taglist sidebar
-Plugin 'taglist.vim'
 " Typescript syntax etc.
 Plugin 'leafgarland/typescript-vim'
 " Camel case motions and text objects
 Plugin 'bkad/CamelCaseMotion'
-" A better calculator
-Plugin 'arecarn/crunch'
 " A better way to make
 Plugin 'tpope/vim-dispatch'
 " Auto-commenting with motions
@@ -246,6 +237,8 @@ Plugin 'abolish.vim'
 Plugin 'paredit.vim'
 " Fix colorschemes for the terminal
 Plugin 'CSApprox'
+" Visualize the undo tree
+Plugin 'sjl/gundo.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -330,7 +323,7 @@ au BufWinEnter ?* silent loadview
 " Auto reload vimrc
 augroup reload_vimrc " {
     autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC | AirlineRefresh
 augroup END " }
 
 " Load local settings if they exist
