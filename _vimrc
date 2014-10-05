@@ -248,11 +248,14 @@ syntax on
 " Plugin settings"{{{
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline_section_b = ''
-let g:airline_section_c = '%.50F%m %y cwd:%{getcwd()}'
+let g:airline_section_b = '%y'
+let g:airline_section_c = '%.50F%m'
+let g:airline_section_x = 'cwd:%{getcwd()}'
 let g:airline_section_z = '%=line:%l/%L col:%c'
 let g:airline_section_warning = ''
 let g:airline_theme = 'molokai'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 
 let g:miniBufExplSortBy="number"
 
