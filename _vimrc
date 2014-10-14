@@ -212,7 +212,8 @@ Plugin 'terryma/vim-smooth-scroll'
 " Automatically load autocomplete menu
 Plugin 'neocomplcache'
 " C# syntax/highlighting
-Plugin 'OrangeT/vim-csharp'
+" TODO: switch to OrangeT/vim-csharp if it ever get fixed up
+Plugin 'j201/vim-csharp'
 " Add :Rename command
 Plugin 'Rename'
 " Typescript syntax etc.
