@@ -92,6 +92,7 @@ set cryptmethod=blowfish	" Use strong encryption
 set incsearch			" Start searching before pressing enter
 set scrolloff=10		" Always show at least ten lines above/below cursor
 set sidescrolloff=5		" Always show at least 5 columns beside cursor
+set ff=unix
 set ffs=unix,dos		" FFS, use unix line endings!
 set ignorecase			" Ignore case by default in searches
 set spelllang=en_ca		" Rocks and trees and trees and rocks...
@@ -165,8 +166,8 @@ nnoremap ,c :Crunch
 nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
 
 " Add j/k to jumplist
-nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'k'<CR>
-nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : '') . 'j'<CR>
+nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'k'<CR>
+nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'j'<CR>
 "}}}
 
 " Custom digraphs
