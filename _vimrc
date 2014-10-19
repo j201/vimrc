@@ -124,8 +124,8 @@ inoremap <C-U> <C-G>u<C-U>
 nmap <F3> :TlistToggle<CR>
 imap <F3> <Esc>:TlistToggle<CR>
 
-nmap Q <nop> 
-" I should find a use for Q
+" For quickly executing the q macro
+nmap Q @q 
 
 " Use <C-G><char> for greek character
 inoremap <C-G> <C-K>*
