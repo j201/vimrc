@@ -125,7 +125,8 @@ nnoremap <esc> :noh<return><esc>
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-nnoremap Q @q 
+" For quickly executing the q macro
+nmap Q @q 
 
 " Reset the behaviour of <C-Y>
 noremap <C-Y> <C-Y>
