@@ -37,6 +37,12 @@ function! ConEmu()
 	execute '!start ConEmu64.exe /dir "' . escape(cwd, '\') . '"'
 endfunction
 
+function! LSN()
+	ls
+	let n = input('Buffer number: ')
+	execute 'b ' . n
+endfunction
+
 " Commands"{{{
 com! LS echo system('dir')
 com! -nargs=1 MKD call system('mkdir <args>')
@@ -108,10 +114,8 @@ set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings "{{{
-nnoremap <C-left>	<Esc>:bp<CR>
-nnoremap <C-right>	<Esc>:bn<CR>
-inoremap <C-left>	<Esc>:bp<CR>i
-inoremap <C-right>	<Esc>:bn<CR>i
+noremap <C-left>	<Esc>:bp<CR>
+noremap <C-right>	<Esc>:bn<CR>
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
@@ -121,14 +125,7 @@ nnoremap <esc> :noh<return><esc>
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-nmap <F3> :TlistToggle<CR>
-imap <F3> <Esc>:TlistToggle<CR>
-
-nmap Q <nop> 
-" I should find a use for Q
-
-" Use <C-G><char> for greek character
-inoremap <C-G> <C-K>*
+nnoremap Q @q 
 
 " Reset the behaviour of <C-Y>
 noremap <C-Y> <C-Y>
@@ -147,9 +144,7 @@ nnoremap Y y$
 
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
-vnoremap ia :<C-U>silent! normal! ggVG<CR>
 omap aa :normal Vaa<CR>
-omap ia :normal Via<CR>
 
 " Continuously indent in visual mode
 vnoremap < <gv
@@ -160,18 +155,17 @@ nnoremap <Leader><Leader>	:confirm bd<CR>
 nnoremap <Leader>v :e $MYVIMRC<CR>
 
 " Comma commands - editing
-nnoremap ,c :Crunch 
-
 " Replace word under cursor
 nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
+" Open gundo
+nnoremap ,gu :GundoShow<CR>
+" Close gundo
+nnoremap ,gc :GundoHide<CR>
 
 " Add j/k to jumplist
 nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'k'<CR>
 nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'j'<CR>
 "}}}
-
-" Custom digraphs
-:digr E# 8707 A# 8704 d# 8705 s# 8747
 
 " File local settings"{{{
 set nocindent " No C indentation by default - it seems to break smartindent
@@ -306,7 +300,10 @@ autocmd FileType clojure nmap ,i ,Wa
 autocmd FileType clojure vmap ,i ,Wa
 
 " add more indentation in html
-:let g:html_indent_inctags = "html,body,head,tbody,li"
+let g:html_indent_inctags = "html,body,head,tbody,li"
+
+let g:gundo_close_on_revert = 1
+
 "}}}
 
 autocmd FileType haskell setlocal expandtab
