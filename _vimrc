@@ -125,8 +125,7 @@ nnoremap <esc> :noh<return><esc>
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-" For quickly executing the q macro
-nmap Q @q 
+nnoremap Q @q 
 
 " Reset the behaviour of <C-Y>
 noremap <C-Y> <C-Y>
@@ -154,6 +153,13 @@ vnoremap > >gv
 " Leader commands - file management and temporary commands
 nnoremap <Leader><Leader>	:confirm bd<CR>
 nnoremap <Leader>v :e $MYVIMRC<CR>
+
+" FT commands
+nnoremap <Leader>fjs	:setf javascript<CR>
+nnoremap <Leader>fcs	:setf cs<CR>
+nnoremap <Leader>fclj	:setf clojure<CR>
+nnoremap <Leader>fhs	:setf haskell<CR>
+nnoremap <Leader>fcpp	:setf cpp<CR>
 
 " Comma commands - editing
 " Replace word under cursor
