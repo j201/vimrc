@@ -34,7 +34,7 @@ endfunction
 function! ConEmu() 
 	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
 	let cwd = getcwd()
-	execute '!start ConEmu64.exe /dir "' . escape(cwd, '\') . '"'
+	execute '!start ConEmu64.exe /cmd cmd "-new_console:d:' . escape(cwd, '\') . '"'
 endfunction
 
 function! LSN()
@@ -107,6 +107,8 @@ set formatoptions-=r	" Don't repeat comment leaders
 set formatoptions-=c	" Don't repeat comment leaders
 set formatoptions-=o	" Don't repeat comment leaders
 set viewdir=~/.vim/view " Set view folder
+set noerrorbells visualbell t_vb= " No error bells or flashing
+autocmd GUIEnter * set visualbell t_vb=
 "}}}
 
 " Status line
@@ -153,6 +155,7 @@ vnoremap > >gv
 " Leader commands - file management and temporary commands
 nnoremap <Leader><Leader>	:confirm bd<CR>
 nnoremap <Leader>v :e $MYVIMRC<CR>
+nnoremap <Leader>cd :cd %:h<CR>
 
 " FT commands
 nnoremap <Leader>fjs	:setf javascript<CR>
@@ -172,6 +175,9 @@ nnoremap ,gc :GundoHide<CR>
 " Add j/k to jumplist
 nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'k'<CR>
 nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'j'<CR>
+
+" Don't change registers on visual paste
+vnoremap p "_dP
 "}}}
 
 " File local settings"{{{
@@ -181,7 +187,10 @@ au FileType txt,text,md,markdown setlocal formatoptions+=t		" autowrap
 au FileType txt,text,md,markdown setlocal wrap			" Wrap text - NOT WORKING
 
 au GUIEnter * simalt ~x " Open maximized
-au VimLeave * mksession! ~/.vim/_session"}}}
+au VimLeave * mksession! ~/.vim/_session"
+
+au FileType * setlocal formatoptions-=c formatoptions-=o formatoptions-=r
+"}}}
 
 " Vundle stuff"{{{
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -242,6 +251,12 @@ Plugin 'paredit.vim'
 Plugin 'CSApprox'
 " Visualize the undo tree
 Plugin 'sjl/gundo.vim'
+" Snippet runner
+Plugin 'SirVer/ultisnips'
+" Snippets
+Plugin 'honza/vim-snippets'
+" Ultisnips <-> Neocomplcache compat
+Plugin 'JazzCore/neocomplcache-ultisnips'
 
 call vundle#end()
 filetype plugin indent on
@@ -292,6 +307,10 @@ autocmd FileType html,css imap <C-E> <C-Y>,
 let g:indent_guides_color_change_percent = 5
 let g:indent_guides_guide_size = 1
 
+let g:UltiSnipsExpandTrigger="<c-l>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
 
@@ -310,6 +329,7 @@ autocmd FileType clojure vmap ,i ,Wa
 let g:html_indent_inctags = "html,body,head,tbody,li"
 
 let g:gundo_close_on_revert = 1
+let g:gundo_right = 1
 
 "}}}
 
