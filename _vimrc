@@ -284,7 +284,7 @@ let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_extensions = ['buffertag']
 " Open CtrlP for old files
 nnoremap <Leader>o :CtrlPMRUFiles<Enter>
-let g:ctrlp_custom_ignore='\v[\/](node_modules|target)$'
+let g:ctrlp_custom_ignore='\v[\/](node_modules|target|out)$'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
