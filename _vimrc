@@ -186,6 +186,8 @@ set nocindent " No C indentation by default - it seems to break smartindent
 au FileType txt,text,md,markdown setlocal formatoptions+=t		" autowrap
 au FileType txt,text,md,markdown setlocal wrap			" Wrap text - NOT WORKING
 
+au FileType html,xml imap <buffer> <// </<<C-X><C-O>
+
 au GUIEnter * simalt ~x " Open maximized
 au VimLeave * mksession! ~/.vim/_session"
 
@@ -257,6 +259,8 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 " Ultisnips <-> Neocomplcache compat
 Plugin 'JazzCore/neocomplcache-ultisnips'
+" Git integration
+Plugin 'tpope/vim-fugitive' 
 
 call vundle#end()
 filetype plugin indent on
