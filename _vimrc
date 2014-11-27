@@ -116,8 +116,8 @@ set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings "{{{
-noremap <C-left>	<Esc>:bp<CR>
-noremap <C-right>	<Esc>:bn<CR>
+noremap <left>	<Esc>:bp<CR>
+noremap <right>	<Esc>:bn<CR>
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
@@ -257,6 +257,8 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 " Ultisnips <-> Neocomplcache compat
 Plugin 'JazzCore/neocomplcache-ultisnips'
+" Elm support
+Plugin 'lambdatoast/elm.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -333,7 +335,10 @@ let g:gundo_right = 1
 
 "}}}
 
-autocmd FileType haskell setlocal expandtab
+autocmd FileType haskell,elm setlocal expandtab
+autocmd FileType elm setlocal tabstop=4
+
+let g:Haskell_no_mapping=1
 
 if (executable('ConEmu64.exe'))
 	nmap got :ConEmu<CR>
