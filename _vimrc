@@ -109,6 +109,8 @@ set formatoptions-=o	" Don't repeat comment leaders
 set viewdir=~/.vim/view " Set view folder
 set noerrorbells visualbell t_vb= " No error bells or flashing
 autocmd GUIEnter * set visualbell t_vb=
+set exrc				" enable per-directory .vimrc files
+set secure				" disable unsafe commands in local .vimrc files
 "}}}
 
 " Status line
@@ -116,8 +118,8 @@ set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings "{{{
-noremap <left>	<Esc>:bp<CR>
-noremap <right>	<Esc>:bn<CR>
+noremap <Left>	<Esc>:bp<CR>
+noremap <Right>	<Esc>:bn<CR>
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
@@ -163,6 +165,8 @@ nnoremap <Leader>fcs	:setf cs<CR>
 nnoremap <Leader>fclj	:setf clojure<CR>
 nnoremap <Leader>fhs	:setf haskell<CR>
 nnoremap <Leader>fcpp	:setf cpp<CR>
+nnoremap <Leader>fhtml	:setf html<CR>
+nnoremap <Leader>fxml	:setf xml<CR>
 
 " Comma commands - editing
 " Replace word under cursor
@@ -185,6 +189,10 @@ set nocindent " No C indentation by default - it seems to break smartindent
 
 au FileType txt,text,md,markdown setlocal formatoptions+=t		" autowrap
 au FileType txt,text,md,markdown setlocal wrap			" Wrap text - NOT WORKING
+
+au FileType html,xml imap <buffer> <// </<<C-X><C-O>
+
+au FileType haskell setlocal expandtab
 
 au GUIEnter * simalt ~x " Open maximized
 au VimLeave * mksession! ~/.vim/_session"
@@ -259,6 +267,8 @@ Plugin 'honza/vim-snippets'
 Plugin 'JazzCore/neocomplcache-ultisnips'
 " Elm support
 Plugin 'lambdatoast/elm.vim'
+" Git integration
+Plugin 'tpope/vim-fugitive' 
 
 call vundle#end()
 filetype plugin indent on
@@ -286,17 +296,17 @@ let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_extensions = ['buffertag']
 " Open CtrlP for old files
 nnoremap <Leader>o :CtrlPMRUFiles<Enter>
-let g:ctrlp_custom_ignore='\v[\/](node_modules|target|out)$'
+let g:ctrlp_custom_ignore='\v[\/](node_modules|target)$'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><CR> neocomplcache#close_popup()."\<CR>"
 
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 25, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 25, 2)<CR>
-noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 25, 4)<CR>
-noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 25, 4)<CR>
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 15, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 15, 2)<CR>
+noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 15, 4)<CR>
+noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 15, 4)<CR>
 
 let Tlist_Auto_Open=0
 let Tlist_Show_One_File = 1
