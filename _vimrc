@@ -163,6 +163,7 @@ nnoremap <Leader>cd :cd %:h<CR>
 nnoremap <Leader>fjs	:setf javascript<CR>
 nnoremap <Leader>fcs	:setf cs<CR>
 nnoremap <Leader>fclj	:setf clojure<CR>
+nnoremap <Leader>fc		:setf c<CR>
 nnoremap <Leader>fhs	:setf haskell<CR>
 nnoremap <Leader>fcpp	:setf cpp<CR>
 nnoremap <Leader>fhtml	:setf html<CR>
