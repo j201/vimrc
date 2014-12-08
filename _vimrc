@@ -123,6 +123,8 @@ noremap <Right>	<Esc>:bn<CR>
 nnoremap <C-s>		:w!<CR>
 inoremap <C-s>		<Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
+nnoremap / :set hls<CR>/
+nnoremap ? :set hls<CR>?
 nnoremap <esc> :noh<return><esc>
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
@@ -149,6 +151,10 @@ nnoremap Y y$
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
 omap aa :normal Vaa<CR>
+" Relies on CamelCaseMotion mappings (which should probably be changed)
+" the vmap doesn't work
+vmap ic :<C-U>silent! normal! ,bv,e<CR>
+omap ic :normal ,bv,e<CR>
 
 " Continuously indent in visual mode
 vnoremap < <gv
@@ -160,14 +166,16 @@ nnoremap <Leader>v :e $MYVIMRC<CR>
 nnoremap <Leader>cd :cd %:h<CR>
 
 " FT commands
-nnoremap <Leader>fjs	:setf javascript<CR>
-nnoremap <Leader>fcs	:setf cs<CR>
-nnoremap <Leader>fclj	:setf clojure<CR>
-nnoremap <Leader>fc		:setf c<CR>
-nnoremap <Leader>fhs	:setf haskell<CR>
-nnoremap <Leader>fcpp	:setf cpp<CR>
-nnoremap <Leader>fhtml	:setf html<CR>
-nnoremap <Leader>fxml	:setf xml<CR>
+nnoremap <Leader>fjs    :setf javascript<CR>
+nnoremap <Leader>fcs    :setf cs<CR>
+nnoremap <Leader>fclj   :setf clojure<CR>
+nnoremap <Leader>fc     :setf c<CR>
+nnoremap <Leader>fhs    :setf haskell<CR>
+nnoremap <Leader>fcpp   :setf cpp<CR>
+nnoremap <Leader>fhtml  :setf html<CR>
+nnoremap <Leader>fxml   :setf xml<CR>
+nnoremap <Leader>md     :setf markdown<CR>
+nnoremap <Leader>ftxt   :setf txt<CR>
 
 " Comma commands - editing
 " Replace word under cursor
@@ -347,7 +355,8 @@ let g:gundo_right = 1
 "}}}
 
 autocmd FileType haskell,elm setlocal expandtab
-autocmd FileType elm setlocal tabstop=4
+" The elm tab handling is sucky
+autocmd FileType elm setf haskell
 
 let g:Haskell_no_mapping=1
 
