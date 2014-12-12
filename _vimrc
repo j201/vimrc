@@ -373,6 +373,10 @@ au User AfterBundles Abolish hte the
 au BufWinLeave ?* mkview
 au BufWinEnter ?* silent loadview
 
+" Set default filetype to txt
+autocmd BufEnter * if &filetype == "" | setlocal ft=txt | endif
+autocmd BufWritePost * if &filetype == "txt" | filetype detect | endif
+
 " Auto reload vimrc
 augroup reload_vimrc " {
     autocmd!
