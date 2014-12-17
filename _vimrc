@@ -174,7 +174,7 @@ nnoremap <Leader>fhs    :setf haskell<CR>
 nnoremap <Leader>fcpp   :setf cpp<CR>
 nnoremap <Leader>fhtml  :setf html<CR>
 nnoremap <Leader>fxml   :setf xml<CR>
-nnoremap <Leader>md     :setf markdown<CR>
+nnoremap <Leader>fmd    :setf markdown<CR>
 nnoremap <Leader>ftxt   :setf txt<CR>
 
 " Comma commands - editing
