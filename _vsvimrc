@@ -2,99 +2,128 @@ set nocompatible
 source $VIMRUNTIME/mswin.vim
 behave mswin
 
-set diffexpr=MyDiff()
-function! MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-endfunction
-
 function! ConEmu() 
-	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
+	
 	let cwd = getcwd()
 	execute '!start ConEmu64.exe /dir ' . escape(cwd, '\')
 endfunction
 
 com! LS echo system('dir')
 com! -nargs=1 MKD call system('mkdir <args>')
-com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
+com! CSCrun !csc /out:"%:r.exe
 com! ConEmu call ConEmu()
-com! -nargs=* E e <args> " Because I often press :E instead of :e
+com! -nargs=* E e <args> 
+com! -nargs=1 New enew | setf <args>
 
-if has("gui_running")
-	set guifont=Consolas:h10
-	colorscheme custom_vivify
-	let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
-endif
+set directory=$TEMP		
 
-set directory=$TEMP		" Temp dir
+set ruler				
+set history=30			
+set incsearch			
+set tabstop=4			
+set shiftwidth=4		
+set noexpandtab			
+set autoindent			
+set fileformats="unix
+set guioptions-=t		
+set guioptions-=T		
+set guioptions+=b		
+set history=100			
+set nowrap				
+set sidescroll=5		
+set encoding=utf-8		
+set fileencodings=ucs-bom,utf-8,ucs-2le,latin1 
+set backspace=indent,eol,start 
+set shortmess+=I		
+set nobackup			
+set writebackup			
+set hidden				
+set selectmode=""		
+set number				
 
-set ruler				" Show cursor position at bottom
-set history=30			" Number of remembered commands
-set incsearch			" Incremental searching
-set tabstop=4			" Set tab width
-set shiftwidth=4		" Set autoindent tab width
-"set noexpandtab			" No spaces, only tabs
-set expandtab
-"set smarttab			" Tab to the correct location when pressed at the start of a line
-set autoindent			" Indents match the last line
-"set clipboard=unnamed	" Use clipboard instead of "+
-set fileformats="unix" " Use unix newlines by default in new buffers
-set guioptions-=t		" Remove tearoff menu options
-set guioptions-=T		" Hide toolbar
-set guioptions+=b		" Show bottom scrollbar
-set history=100			" Remember 100 commands
-set nowrap				" No line wrapping
-set sidescroll=5		" Set horizontal scroll when moving off screen
-set encoding=utf-8		" Unicode
-set fileencodings=ucs-bom,utf-8,ucs-2le,latin1 " Default encodings to try when opening a file
-set backspace=indent,eol,start " Allow backspacing over everything
-set shortmess+=I		" No intro message
-set nobackup			" No persistent backup...
-set writebackup			" But a temporary one
-set hidden				" Don't abandon hidden buffers
-set selectmode=""		" Always use visual mode, not select mode
-set number				" Have absolute numbering at the cursor
-set relativenumber		" Number relative to the cursor
-set linebreak			" If wrapping is on, wrap at words
-set cryptmethod=blowfish	" Use strong encryption
-set incsearch			" Start searching before pressing enter
-set scrolloff=1			" Always show at least one line above/below cursor
-set sidescrolloff=5		" Always show at least 5 columns beside cursor
-set ffs=unix,dos		" FFS, use unix line endings!
-set ignorecase			" Ignore case by default in searches
-set nomagic				" Don't use magic in searches by default (might break plugins)
+set linebreak			
+set cryptmethod=blowfish	
+set incsearch			
+set scrolloff=10		
+set sidescrolloff=5		
+set ffs=unix,dos		
+set ignorecase			
+set spelllang=en_ca		
+set autoread			
+set formatoptions-=r	
+set formatoptions-=c	
+set formatoptions-=o	
 
-" Status line
-set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
-set laststatus=2
-
-" Key mappings
-nnoremap <Leader><Leader>	:x<CR>
+nnoremap <left>	<Esc>:bp<CR>
+nnoremap <right>	<Esc>:bn<CR>
+nnoremap <C-s>		:w!<CR>
+inoremap <C-s>		<Esc>:w!<CR>
+map <F3> :source ~/.vim/_session <cr>     
 nnoremap <esc> :noh<return><esc>
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
 
-nnoremap daa ggVGd
+
+inoremap <C-U> <C-G>u<C-U>
+nmap <F3> :TlistToggle<CR>
+imap <F3> <Esc>:TlistToggle<CR>
+nmap Q <nop> 
+
+
+inoremap <C-G> <C-K>*
+
+noremap <C-Y> <C-Y>
+
+noremap <C-A> <C-A>
+
+
+nnoremap / /\V
+nnoremap :s/ :s/\V
+nnoremap :%s/ :%s/\V
+vnoremap :s/ :s/\V
+
+
+nnoremap Y y$
+
+nnoremap cc ddO
+
 nnoremap vaa ggVG
-nnoremap =aa ggVG=
 nnoremap caa ggVGc
+nnoremap daa ggdG
+nnoremap yaa ggyG
+nnoremap "+yaa ggVG"+y
+nnoremap =aa gg=G
+
+
+vnoremap < <gv
+vnoremap > >gv
+
+
+nnoremap <Leader><Leader>	:x<CR>
+nnoremap <Leader>v :e $MYVIMRC<CR>
+
+
+nnoremap ,c :Crunch 
+
+nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
+
+
+nnoremap vap {w0v}
+nnoremap dap {w0d}
+nnoremap =ap {w0=}
+nnoremap cap {w0c}
+nnoremap yap {w0y}
+
+
+digr E# 8707 A# 8704 d# 8705 s# 8747
+
+
+set nocindent 
+
+au FileType txt,text,md,markdown setlocal formatoptions+=t		
+au FileType txt,text,md,markdown setlocal wrap			
+
+
+let g:html_indent_inctags = "html,body,head,tbody,li"
+
+if (executable('ConEmu64.exe'))
+	nmap got :ConEmu<CR>
+endif
