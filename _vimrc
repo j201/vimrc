@@ -63,7 +63,8 @@ if !has("gui_running") && !empty($CONEMUBUILD)
   let &t_AF="\e[38;5;%dm"
 endif 
 
-colorscheme custom_vivify
+colorscheme stainless
+set background=light
 let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 
 " `set` settings"{{{
@@ -201,12 +202,13 @@ au FileType txt,text,md,markdown setlocal wrap			" Wrap text - NOT WORKING
 
 au FileType html,xml imap <buffer> <// </<<C-X><C-O>
 
+au FileType vim set foldmethod=marker
+
 au FileType haskell setlocal expandtab
 
 au GUIEnter * simalt ~x " Open maximized
 au VimLeave * mksession! ~/.vim/_session"
 
-au FileType * setlocal formatoptions-=c formatoptions-=o formatoptions-=r
 "}}}
 
 " Vundle stuff"{{{
@@ -278,11 +280,15 @@ Plugin 'JazzCore/neocomplcache-ultisnips'
 Plugin 'lambdatoast/elm.vim'
 " Git integration
 Plugin 'tpope/vim-fugitive' 
+" My colour scheme
+Plugin 'j201/stainless'
 
 call vundle#end()
 filetype plugin indent on
 syntax on
 "}}}
+
+au FileType * setlocal formatoptions-=c formatoptions-=o formatoptions-=r
 
 " Plugin settings"{{{
 let g:airline#extensions#tabline#enabled = 1
@@ -371,7 +377,7 @@ au User AfterBundles Abolish hte the
 
 " Save folds
 au BufWinLeave ?* mkview
-au BufWinEnter ?* silent loadview
+" au BufWinEnter ?* silent loadview
 
 " Set default filetype to txt
 autocmd BufEnter * if &filetype == "" | setlocal ft=txt | endif
