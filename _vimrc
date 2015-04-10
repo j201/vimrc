@@ -63,9 +63,6 @@ if !has("gui_running") && !empty($CONEMUBUILD)
   let &t_AF="\e[38;5;%dm"
 endif 
 
-colorscheme stainless
-set background=light
-let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 
 " `set` settings"{{{
 set directory=$TEMP		" Temp dir
@@ -287,6 +284,10 @@ call vundle#end()
 filetype plugin indent on
 syntax on
 "}}}
+
+colorscheme stainless
+set background=light
+let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 
 au FileType * setlocal formatoptions-=c formatoptions-=o formatoptions-=r
 
