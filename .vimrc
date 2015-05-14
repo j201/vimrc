@@ -49,12 +49,9 @@ com! -nargs=1 MKD call system('mkdir <args>')
 com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
 com! ConEmu call ConEmu()
 com! -nargs=* E e <args> " Because I often press :E instead of :e
+com! -nargs=* W w <args>
 com! -nargs=1 New enew | setf <args>
 "}}}
-
-if has("gui_running")
-	set guifont=Consolas:h10
-endif
 
 if !has("gui_running") && !empty($CONEMUBUILD)
   set term=xterm
@@ -66,8 +63,21 @@ endif
 colorscheme custom_vivify
 let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 
+" OS-specific settings{{{
+if has("gui_running")
+	if has("unix")
+		"For some reason, Consolas doesn't look nice on linux mint at least
+		set guifont=Ubuntu\ Mono\ 11
+		set lines=999 columns=999
+	elseif has("win32") || has("win64")
+		set guifont=Consolas:h10
+		au GUIEnter * simalt ~x " Open maximized
+		set directory=$TEMP		" Temp dir
+	endif
+endif
+"}}}
+
 " `set` settings"{{{
-set directory=$TEMP		" Temp dir
 set ruler				" Show cursor position at bottom
 set history=30			" Number of remembered commands
 set incsearch			" Incremental searching
@@ -203,7 +213,6 @@ au FileType html,xml imap <buffer> <// </<<C-X><C-O>
 
 au FileType haskell setlocal expandtab
 
-au GUIEnter * simalt ~x " Open maximized
 au VimLeave * mksession! ~/.vim/_session"
 
 au FileType * setlocal formatoptions-=c formatoptions-=o formatoptions-=r
@@ -230,7 +239,8 @@ Plugin 'tpope/vim-surround'
 " Markdown syntax
 Plugin 'hallison/vim-markdown'
 " Trying this instead of JavaScript-Indent
-Plugin 'pangloss/vim-javascript'
+" Plugin 'pangloss/vim-javascript'
+Plugin 'JavaScript-Indent'
 " Fuzzy file searching
 Plugin 'kien/ctrlp.vim'
 " gof and got to open file in explorer/terminal
@@ -278,6 +288,8 @@ Plugin 'JazzCore/neocomplcache-ultisnips'
 Plugin 'lambdatoast/elm.vim'
 " Git integration
 Plugin 'tpope/vim-fugitive' 
+" Make haskell pretty
+Plugin 'enomsg/vim-haskellConcealPlus'
 
 call vundle#end()
 filetype plugin indent on
@@ -357,6 +369,8 @@ let g:gundo_right = 1
 autocmd FileType haskell,elm setlocal expandtab
 " The elm tab handling is sucky
 autocmd FileType elm setf haskell
+
+au BufNewFile,BufRead package.json setlocal expandtab tabstop=2 shiftwidth=2
 
 let g:Haskell_no_mapping=1
 
