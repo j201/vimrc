@@ -31,16 +31,16 @@ function! MyDiff()
 endfunction
 "}}}
 
-function! ConEmu() 
-	" Should be more complex to find conemu - assumes ComEmu64 is in the PATH
-	let cwd = getcwd()
-	execute '!start ConEmu64.exe /cmd cmd "-new_console:d:' . escape(cwd, '\') . '"'
+function! ConEmu()
+    " Should be more complex to find conemu - assumes ComEmu64 is in the PATH
+    let cwd = getcwd()
+    execute '!start ConEmu64.exe /cmd cmd "-new_console:d:' . escape(cwd, '\') . '"'
 endfunction
 
 function! LSN()
-	ls
-	let n = input('Buffer number: ')
-	execute 'b ' . n
+    ls
+    let n = input('Buffer number: ')
+    execute 'b ' . n
 endfunction
 
 " Commands"{{{
@@ -54,19 +54,17 @@ com! -nargs=1 New enew | setf <args>
 "}}}
 
 if !has("gui_running") && !empty($CONEMUBUILD)
-  set term=xterm
-  set t_Co=256
-  let &t_AB="\e[48;5;%dm"
-  let &t_AF="\e[38;5;%dm"
-endif 
-
+  " set term=xterm
+  " set t_Co=256
+  " let &t_AB="\e[48;5;%dm"
+  " let &t_AF="\e[38;5;%dm"
+endif
 
 " OS-specific settings{{{
 if has("gui_running")
 	if has("unix")
 		"For some reason, Consolas doesn't look nice on linux mint at least
 		set guifont=Ubuntu\ Mono\ 11
-		set lines=999 columns=999
 	elseif has("win32") || has("win64")
 		set guifont=Consolas:h10
 		au GUIEnter * simalt ~x " Open maximized
@@ -85,51 +83,53 @@ set noexpandtab			" No spaces, only tabs
 "set smarttab			" Tab to the correct location when pressed at the start of a line
 set autoindent			" Indents match the last line
 set fileformats="unix" " Use unix newlines by default in new buffers
-set guioptions-=t		" Remove tearoff menu options
-set guioptions-=T		" Hide toolbar
-set guioptions+=b		" Show bottom scrollbar
-set history=100			" Remember 100 commands
-set nowrap				" No line wrapping
-set sidescroll=5		" Set horizontal scroll when moving off screen
-set encoding=utf-8		" Unicode
+set guioptions-=t        " Remove tearoff menu options
+set guioptions-=T        " Hide toolbar
+set guioptions+=b        " Show bottom scrollbar
+set history=100            " Remember 100 commands
+set nowrap                " No line wrapping
+set sidescroll=5        " Set horizontal scroll when moving off screen
+set encoding=utf-8        " Unicode
 set fileencodings=ucs-bom,utf-8,ucs-2le,latin1 " Default encodings to try when opening a file
 set backspace=indent,eol,start " Allow backspacing over everything
-set shortmess+=I		" No intro message
-set nobackup			" No persistent backup...
-set writebackup			" But a temporary one
-set hidden				" Don't abandon hidden buffers
-set selectmode=""		" Always use visual mode, not select mode
-set number				" Have absolute numbering at the cursor
-set relativenumber		" Number relative to the cursor
-set linebreak			" If wrapping is on, wrap at words
-set cryptmethod=blowfish	" Use strong encryption
-set incsearch			" Start searching before pressing enter
-set scrolloff=10		" Always show at least ten lines above/below cursor
-set sidescrolloff=5		" Always show at least 5 columns beside cursor
+set shortmess+=I        " No intro message
+set nobackup            " No persistent backup...
+set writebackup            " But a temporary one
+set hidden                " Don't abandon hidden buffers
+set selectmode=""        " Always use visual mode, not select mode
+set number                " Have absolute numbering at the cursor
+set relativenumber        " Number relative to the cursor
+set linebreak            " If wrapping is on, wrap at words
+set cryptmethod=blowfish    " Use strong encryption
+set incsearch            " Start searching before pressing enter
+set scrolloff=10        " Always show at least ten lines above/below cursor
+set sidescrolloff=5        " Always show at least 5 columns beside cursor
 set ff=unix
-set ffs=unix,dos		" FFS, use unix line endings!
-set ignorecase			" Ignore case by default in searches
-set spelllang=en_ca		" Rocks and trees and trees and rocks...
-set autoread			" Autoreload files changed externally
-set formatoptions-=r	" Don't repeat comment leaders
-set formatoptions-=c	" Don't repeat comment leaders
-set formatoptions-=o	" Don't repeat comment leaders
+set ffs=unix,dos        " FFS, use unix line endings!
+set ignorecase            " Ignore case by default in searches
+set spelllang=en_ca        " Rocks and trees and trees and rocks...
+set autoread            " Autoreload files changed externally
+set formatoptions-=r    " Don't repeat comment leaders
+set formatoptions-=c    " Don't repeat comment leaders
+set formatoptions-=o    " Don't repeat comment leaders
 set viewdir=~/.vim/view " Set view folder
 set noerrorbells visualbell t_vb= " No error bells or flashing
 autocmd GUIEnter * set visualbell t_vb=
-set exrc				" enable per-directory .vimrc files
-set secure				" disable unsafe commands in local .vimrc files
+set exrc                " enable per-directory .vimrc files
+set secure                " disable unsafe commands in local .vimrc files
+set showcmd " Show pending command
+set breakindent " Preserve indent level when wrapping text
 "}}}
 
 " Status line
-set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\ 
+set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings "{{{
-noremap <Left>	<Esc>:bp<CR>
-noremap <Right>	<Esc>:bn<CR>
-nnoremap <C-s>		:w!<CR>
-inoremap <C-s>		<Esc>:w!<CR>
+noremap <Left>    <Esc>:bp<CR>
+noremap <Right>    <Esc>:bn<CR>
+nnoremap <C-s>        :w!<CR>
+inoremap <C-s>        <Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
 nnoremap / :set hls<CR>/
 nnoremap ? :set hls<CR>?
@@ -139,7 +139,7 @@ nnoremap <esc> :noh<return><esc>
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-nnoremap Q @q 
+nnoremap Q @q
 
 " Reset the behaviour of <C-Y>
 noremap <C-Y> <C-Y>
@@ -169,9 +169,10 @@ vnoremap < <gv
 vnoremap > >gv
 
 " Leader commands - file management and temporary commands
-nnoremap <Leader><Leader>	:confirm bd<CR>
+nnoremap <Leader><Leader>    :confirm bd<CR>
 nnoremap <Leader>v :e $MYVIMRC<CR>
 nnoremap <Leader>cd :cd %:h<CR>
+nnoremap <Leader>yp :let @+=expand("%:p")<CR>
 
 " FT commands
 nnoremap <Leader>fjs    :setf javascript<CR>
@@ -184,6 +185,7 @@ nnoremap <Leader>fhtml  :setf html<CR>
 nnoremap <Leader>fxml   :setf xml<CR>
 nnoremap <Leader>fmd    :setf markdown<CR>
 nnoremap <Leader>ftxt   :setf txt<CR>
+nnoremap <Leader>f        :setf
 
 " Comma commands - editing
 " Replace word under cursor
@@ -199,13 +201,20 @@ nnoremap <silent> j :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g')
 
 " Don't change registers on visual paste
 vnoremap p "_dP
+
+" Don't paste on middle mouse click (was hitting it accidentally)
+map <MiddleMouse> <Nop>
+imap <MiddleMouse> <Nop>
 "}}}
 
 " File local settings"{{{
 set nocindent " No C indentation by default - it seems to break smartindent
 
-au FileType txt,text,md,markdown setlocal formatoptions+=t		" autowrap
-au FileType txt,text,md,markdown setlocal wrap			" Wrap text - NOT WORKING
+au FileType txt,text,md,markdown setlocal formatoptions+=t        " autowrap
+au FileType txt,text,md,markdown setlocal wrap            " Wrap text - NOT WORKING
+
+au FileType md setf markdown
+au BufNewFile,BufRead *.md setf markdown
 
 au FileType html,xml imap <buffer> <// </<<C-X><C-O>
 
@@ -217,7 +226,7 @@ au VimLeave * mksession! ~/.vim/_session"
 
 "}}}
 
-" Vundle stuff"{{{
+" Plugins"{{{
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
@@ -241,7 +250,13 @@ Plugin 'hallison/vim-markdown'
 " Plugin 'pangloss/vim-javascript'
 Plugin 'JavaScript-Indent'
 " Fuzzy file searching
-Plugin 'kien/ctrlp.vim'
+" Plugin 'kien/ctrlp.vim'
+" Here goes...
+Plugin 'Shougo/unite.vim'
+" MRU sources for unite
+Plugin 'Shougo/neomru.vim'
+" tags source for unite
+Plugin 'tsukkee/unite-tag'
 " gof and got to open file in explorer/terminal
 Plugin 'justinmk/vim-gtfo'
 " Smooth scrolling
@@ -286,9 +301,11 @@ Plugin 'JazzCore/neocomplcache-ultisnips'
 " Elm support
 Plugin 'lambdatoast/elm.vim'
 " Git integration
-Plugin 'tpope/vim-fugitive' 
+Plugin 'tpope/vim-fugitive'
 " My colour scheme
 Plugin 'j201/stainless'
+" junegunn's nutso plugin for aligning around particular characters
+Plugin 'junegunn/vim-easy-align'
 
 call vundle#end()
 filetype plugin indent on
@@ -319,10 +336,11 @@ let g:syntastic_javascript_checkers=['jshint']
 let g:syntastic_typescript_tsc_args='--target ES5 --module commonjs'
 
 let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_working_path_mode = ''
 let g:ctrlp_extensions = ['buffertag']
 " Open CtrlP for old files
-nnoremap <Leader>o :CtrlPMRUFiles<Enter>
-let g:ctrlp_custom_ignore='\v[\/](node_modules|target)$'
+" nnoremap <Leader>o :CtrlPMRUFiles<Enter>
+let g:ctrlp_custom_ignore='\v[\/](node_modules|target|build)$'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_min_syntax_length = 2
@@ -369,6 +387,21 @@ let g:html_indent_inctags = "html,body,head,tbody,li"
 let g:gundo_close_on_revert = 1
 let g:gundo_right = 1
 
+" Unite settings
+nnoremap    [unite]   <Nop>
+nmap - [unite]
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
+nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
+nnoremap [unite]b :<C-u>Unite buffer<CR>
+nnoremap [unite]r :<C-u>Unite register<CR>
+nnoremap [unite]j :<C-u>Unite jump<CR>
+nnoremap [unite]c :<C-u>Unite change<CR>
+nnoremap [unite]t :<C-u>Unite -start-insert tag<CR>
+function! s:unite_settings()
+  nmap <buffer> <esc> <plug>(unite_exit)
+endfunction
+autocmd FileType unite call s:unite_settings()
 "}}}
 
 autocmd FileType haskell,elm setlocal expandtab
@@ -380,7 +413,7 @@ au BufNewFile,BufRead package.json setlocal expandtab tabstop=2 shiftwidth=2
 let g:Haskell_no_mapping=1
 
 if (executable('ConEmu64.exe'))
-	nmap got :ConEmu<CR>
+    nmap got :ConEmu<CR>
 endif
 
 let g:colorizer_startup = 1
@@ -404,5 +437,7 @@ augroup END " }
 
 " Load local settings if they exist
 if filereadable($HOME . "/_vimrclocal")
-	so $HOME/_vimrclocal
+    so $HOME/_vimrclocal
+elseif filereadable($HOME . "/.vimrclocal")
+    so $HOME/.vimrclocal
 endif
