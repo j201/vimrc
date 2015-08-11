@@ -5,30 +5,32 @@ source $VIMRUNTIME/mswin.vim
 behave mswin
 
 " MyDiff function"{{{
-set diffexpr=MyDiff()
-function! MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
+if has("win32") || has("win64")
+  set diffexpr=MyDiff()
+  function! MyDiff()
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    let eq = ''
+    if $VIMRUNTIME =~ ' '
+      if &sh =~ '\<cmd'
+        let cmd = '""' . $VIMRUNTIME . '\diff"'
+        let eq = '"'
+      else
+        let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+      endif
     else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+      let cmd = $VIMRUNTIME . '\diff'
     endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-endfunction
+    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+  endfunction
+endif
 "}}}
 
 function! ConEmu()
@@ -43,14 +45,23 @@ function! LSN()
     execute 'b ' . n
 endfunction
 
+function! BufNumReset()
+    mksession! ~/.vim/_bnrsession
+    %bd
+    so ~/.vim/_bnrsession
+endfunction
+
 " Commands"{{{
 com! LS echo system('dir')
 com! -nargs=1 MKD call system('mkdir <args>')
 com! CSCrun !csc /out:"%:r.exe" "%" && "%:r.exe"
 com! ConEmu call ConEmu()
-com! -nargs=* E e <args> " Because I often press :E instead of :e
-com! -nargs=* W w <args>
-com! -nargs=1 New enew | setf <args>
+com! -nargs=* -complete=file E e <args> " Because I often press :E instead of :e
+com! -nargs=* -complete=file W w <args>
+com! -nargs=* Q q <args>
+com! -nargs=* -complete=dir Cd cd <args>
+com! -nargs=1 -complete=filetype New enew | setf <args>
+com! BufNumReset call BufNumReset()
 "}}}
 
 if !has("gui_running") && !empty($CONEMUBUILD)
@@ -62,63 +73,69 @@ endif
 
 " OS-specific settings{{{
 if has("gui_running")
-	if has("unix")
-		"For some reason, Consolas doesn't look nice on linux mint at least
-		set guifont=Ubuntu\ Mono\ 11
-	elseif has("win32") || has("win64")
-		set guifont=Consolas:h10
-		au GUIEnter * simalt ~x " Open maximized
-		set directory=$TEMP		" Temp dir
-	endif
+    if has("unix")
+        "For some reason, Consolas doesn't look nice on linux mint at least
+        set guifont=Ubuntu\ Mono\ 11
+    elseif has("win32") || has("win64")
+        set guifont=Consolas:h10
+        au GUIEnter * simalt ~x " Open maximized
+        set directory=$TEMP        " Temp dir
+    endif
 endif
 "}}}
 
 " `set` settings"{{{
-set ruler				" Show cursor position at bottom
-set history=30			" Number of remembered commands
-set incsearch			" Incremental searching
-set tabstop=4			" Set tab width
-set shiftwidth=4		" Set autoindent tab width
-set noexpandtab			" No spaces, only tabs
-"set smarttab			" Tab to the correct location when pressed at the start of a line
-set autoindent			" Indents match the last line
-set fileformats="unix" " Use unix newlines by default in new buffers
-set guioptions-=t        " Remove tearoff menu options
-set guioptions-=T        " Hide toolbar
-set guioptions+=b        " Show bottom scrollbar
-set history=100            " Remember 100 commands
+set ruler                 " Show cursor position at bottom
+set history=30            " Number of remembered commands
+set incsearch             " Incremental searching
+set tabstop=4             " Set tab width
+set shiftwidth=4          " Set autoindent tab width
+set noexpandtab           " No spaces, only tabs
+"set smarttab             " Tab to the correct location when pressed at the start of a line
+set autoindent            " Indents match the last line
+set fileformats="unix"    " Use unix newlines by default in new buffers
+set guioptions-=t         " Remove tearoff menu options
+set guioptions-=T         " Hide toolbar
+set guioptions+=b         " Show bottom scrollbar
+set history=100           " Remember 100 commands
 set nowrap                " No line wrapping
-set sidescroll=5        " Set horizontal scroll when moving off screen
+set sidescroll=5          " Set horizontal scroll when moving off screen
 set encoding=utf-8        " Unicode
 set fileencodings=ucs-bom,utf-8,ucs-2le,latin1 " Default encodings to try when opening a file
 set backspace=indent,eol,start " Allow backspacing over everything
-set shortmess+=I        " No intro message
-set nobackup            " No persistent backup...
-set writebackup            " But a temporary one
+set shortmess+=I          " No intro message
+set nobackup              " No persistent backup...
+set writebackup           " But a temporary one
 set hidden                " Don't abandon hidden buffers
-set selectmode=""        " Always use visual mode, not select mode
+set selectmode=""         " Always use visual mode, not select mode
 set number                " Have absolute numbering at the cursor
 set relativenumber        " Number relative to the cursor
-set linebreak            " If wrapping is on, wrap at words
-set cryptmethod=blowfish    " Use strong encryption
-set incsearch            " Start searching before pressing enter
-set scrolloff=10        " Always show at least ten lines above/below cursor
-set sidescrolloff=5        " Always show at least 5 columns beside cursor
+set linebreak             " If wrapping is on, wrap at words
+set cryptmethod=blowfish  " Use strong encryption
+set incsearch             " Start searching before pressing enter
+set scrolloff=10          " Always show at least ten lines above/below cursor
+set sidescrolloff=5       " Always show at least 5 columns beside cursor
 set ff=unix
-set ffs=unix,dos        " FFS, use unix line endings!
+set ffs=unix,dos          " FFS, use unix line endings!
 set ignorecase            " Ignore case by default in searches
-set spelllang=en_ca        " Rocks and trees and trees and rocks...
-set autoread            " Autoreload files changed externally
-set formatoptions-=r    " Don't repeat comment leaders
-set formatoptions-=c    " Don't repeat comment leaders
-set formatoptions-=o    " Don't repeat comment leaders
-set viewdir=~/.vim/view " Set view folder
+set spelllang=en_ca       " Rocks and trees and trees and rocks...
+set autoread              " Autoreload files changed externally
+set formatoptions-=r      " Don't repeat comment leaders
+set formatoptions-=c      " Don't repeat comment leaders
+set formatoptions-=o      " Don't repeat comment leaders
+set viewdir=~/.vim/view   " Set view folder
 set noerrorbells visualbell t_vb= " No error bells or flashing
 autocmd GUIEnter * set visualbell t_vb=
-set exrc                " enable per-directory .vimrc files
+set exrc                  " enable per-directory .vimrc files
 set secure                " disable unsafe commands in local .vimrc files
-set showcmd " Show pending command
-set breakindent " Preserve indent level when wrapping text
+set showcmd               " Show pending command
+set breakindent           " Preserve indent level when wrapping text
+set report=2              " Report the number of lines yanked or deleted
+set diffopt+=vertical     " Open diffs as vertical by default
+set wildmenu			  " Magic super ex completion
+set wildmode=longest,list,full " Subsequent wildmenu tabs complete, then list, then cycle
+set completeopt-=preview  " Never open preview window on autocomplete
+set hlsearch			  " Highlight by default
 "}}}
 
 " Status line
@@ -127,13 +144,22 @@ set laststatus=2
 
 " Key mappings "{{{
 noremap <Left>    <Esc>:bp<CR>
+noremap <Up>    <Esc>:bp<CR>
 noremap <Right>    <Esc>:bn<CR>
+noremap <Down>    <Esc>:bn<CR>
 nnoremap <C-s>        :w!<CR>
 inoremap <C-s>        <Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
 nnoremap / :set hls<CR>/
 nnoremap ? :set hls<CR>?
-nnoremap <esc> :noh<return><esc>
+
+if has('gui_running')
+  nnoremap <silent> <Esc> :noh<CR><Esc>
+else
+  augroup no_highlight
+    autocmd TermResponse * nnoremap <esc> :noh<return><esc>
+  augroup END
+end
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -159,20 +185,26 @@ nnoremap Y y$
 " Custom text objects (http://vim.wikia.com/wiki/Creating_new_text_objects)
 vnoremap aa :<C-U>silent! normal! ggVG<CR>
 omap aa :normal Vaa<CR>
+vnoremap ac :<C-U>silent! normal! `[v`]$<CR>
+omap ac :normal Vac<CR>
 " Relies on CamelCaseMotion mappings (which should probably be changed)
 " the vmap doesn't work
-vmap ic :<C-U>silent! normal! ,bv,e<CR>
-omap ic :normal ,bv,e<CR>
+vmap i,w :<C-U>silent! normal! ,bv,e<CR>
+omap i,w :normal ,bv,e<CR>
 
 " Continuously indent in visual mode
 vnoremap < <gv
 vnoremap > >gv
 
 " Leader commands - file management and temporary commands
-nnoremap <Leader><Leader>    :confirm bd<CR>
+nnoremap <Leader><Leader>    :b#<bar>confirm bd#<CR>
+nnoremap <Leader><Leader>    :BD<CR>
 nnoremap <Leader>v :e $MYVIMRC<CR>
 nnoremap <Leader>cd :cd %:h<CR>
 nnoremap <Leader>yp :let @+=expand("%:p")<CR>
+nnoremap <Leader>b :ls<CR>:b<Space>
+nnoremap <Leader>gg viw"gy:Ggrep <C-R>g<CR>
+vnoremap <Leader>gg "gy:Ggrep <C-R>g<CR>
 
 " FT commands
 nnoremap <Leader>fjs    :setf javascript<CR>
@@ -185,7 +217,7 @@ nnoremap <Leader>fhtml  :setf html<CR>
 nnoremap <Leader>fxml   :setf xml<CR>
 nnoremap <Leader>fmd    :setf markdown<CR>
 nnoremap <Leader>ftxt   :setf txt<CR>
-nnoremap <Leader>f        :setf
+nnoremap <Leader>f        :setf<Space>
 
 " Comma commands - editing
 " Replace word under cursor
@@ -220,9 +252,10 @@ au FileType html,xml imap <buffer> <// </<<C-X><C-O>
 
 au FileType vim set foldmethod=marker
 
-au FileType haskell setlocal expandtab
-
 au VimLeave * mksession! ~/.vim/_session"
+
+" Show trailing whitespace, but I want to explicitly whitelist the file types
+au FileType c,h,javascript,python,clojure,haskell,cpp,css match SpellBad '\s\+$'
 
 "}}}
 
@@ -232,6 +265,8 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " My bundles
+" Enhanced . support for plugins
+Plugin 'tpope/vim-repeat'
 " Pretty status line and more importantly, buffer line
 Plugin 'bling/vim-airline'
 " Clojure quasi-repl
@@ -289,11 +324,11 @@ Plugin 'abolish.vim'
 " Lisp editing
 Plugin 'paredit.vim'
 " Fix colorschemes for the terminal
-Plugin 'CSApprox'
+" Plugin 'CSApprox'
 " Visualize the undo tree
 Plugin 'sjl/gundo.vim'
 " Snippet runner
-Plugin 'SirVer/ultisnips'
+" Plugin 'SirVer/ultisnips'
 " Snippets
 Plugin 'honza/vim-snippets'
 " Ultisnips <-> Neocomplcache compat
@@ -306,21 +341,33 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'j201/stainless'
 " junegunn's nutso plugin for aligning around particular characters
 Plugin 'junegunn/vim-easy-align'
+" Trying this as a buffer lister
+Plugin 'jeetsukumaran/vim-buffergator'
+" Close a buffer without closing its window
+Plugin 'qpkorr/vim-bufkill'
+" Show git diff info beside the buffer
+Plugin 'airblade/vim-gitgutter'
+" Rust support
+Plugin 'rust-lang/rust.vim'
 
 call vundle#end()
 filetype plugin indent on
 syntax on
 "}}}
 
-colorscheme stainless
+" if has("gui_running")
+  colorscheme stainless
+" else
+"   colorscheme stainless
+"   colorscheme morning " TODO
+" endif
 set background=light
-let $COLORSCHEME=$VIM . '\vimfiles\colors\' . g:colors_name . '.vim'
 
 au FileType * setlocal formatoptions-=c formatoptions-=o formatoptions-=r
 
 " Plugin settings"{{{
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_section_b = '%y'
 let g:airline_section_c = '%.50F%m'
 let g:airline_section_x = 'cwd:%{getcwd()}'
@@ -331,6 +378,14 @@ let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 
 let g:miniBufExplSortBy="number"
+
+let g:buffergator_autodismiss_on_select = 0
+let g:buffergator_display_regime = "basename"
+let g:buffergator_autoupdate = 1
+let g:buffergator_split_size = 26
+let g:buffergator_suppress_keymaps = 1
+nmap <F5> :BuffergatorOpen<CR><C-W>l
+" au VimEnter * exe 'BuffergatorOpen' | setf buffergator | exe "normal \<c-w>l"
 
 let g:syntastic_javascript_checkers=['jshint']
 let g:syntastic_typescript_tsc_args='--target ES5 --module commonjs'
@@ -370,8 +425,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
 
-autocmd FileType haskell setlocal expandtab
-
 autocmd FileType json nnoremap ,f :%!python -m json.tool<CR>
 autocmd FileType json set syntax=javascript
 
@@ -386,22 +439,33 @@ let g:html_indent_inctags = "html,body,head,tbody,li"
 
 let g:gundo_close_on_revert = 1
 let g:gundo_right = 1
+if !has('python')
+    let g:gundo_prefer_python3 = 1
+endif
 
 " Unite settings
 nnoremap    [unite]   <Nop>
 nmap - [unite]
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
 nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
-nnoremap [unite]b :<C-u>Unite buffer<CR>
-nnoremap [unite]r :<C-u>Unite register<CR>
-nnoremap [unite]j :<C-u>Unite jump<CR>
-nnoremap [unite]c :<C-u>Unite change<CR>
+nnoremap [unite]b :<C-u>Unite -start-insert buffer<CR>
+nnoremap [unite]r :<C-u>Unite -start-insert register<CR>
+nnoremap [unite]j :<C-u>Unite -start-insert jump<CR>
+nnoremap [unite]c :<C-u>Unite -start-insert change<CR>
 nnoremap [unite]t :<C-u>Unite -start-insert tag<CR>
 function! s:unite_settings()
   nmap <buffer> <esc> <plug>(unite_exit)
 endfunction
 autocmd FileType unite call s:unite_settings()
+
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+hi GitGutterChange ctermfg=60 ctermbg=252 guifg=#0000ff guibg=#cccccc guisp=#cccccc
+
 "}}}
 
 autocmd FileType haskell,elm setlocal expandtab
