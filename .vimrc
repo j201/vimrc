@@ -349,6 +349,8 @@ Plugin 'qpkorr/vim-bufkill'
 Plugin 'airblade/vim-gitgutter'
 " Rust support
 Plugin 'rust-lang/rust.vim'
+" TOML support
+Plugin 'cespare/vim-toml'
 
 call vundle#end()
 filetype plugin indent on
@@ -466,6 +468,10 @@ nmap ga <Plug>(EasyAlign)
 
 hi GitGutterChange ctermfg=60 ctermbg=252 guifg=#0000ff guibg=#cccccc guisp=#cccccc
 
+" rust.vim overwrites indent settings. This makes me very angry. I don't want style pedantry from a highlighting plugin.
+let g:rust_recommended_style = 0
+" Similarly...
+au FileType vim setlocal textwidth=0
 "}}}
 
 autocmd FileType haskell,elm setlocal expandtab
