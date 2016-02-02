@@ -341,8 +341,9 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'j201/stainless'
 " junegunn's nutso plugin for aligning around particular characters
 Plugin 'junegunn/vim-easy-align'
-" Trying this as a buffer lister
-Plugin 'jeetsukumaran/vim-buffergator'
+" Persistent buffer list
+" Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'j201/vim-buffergator'
 " Close a buffer without closing its window
 Plugin 'qpkorr/vim-bufkill'
 " Show git diff info beside the buffer
@@ -386,6 +387,7 @@ let g:buffergator_display_regime = "basename"
 let g:buffergator_autoupdate = 1
 let g:buffergator_split_size = 26
 let g:buffergator_suppress_keymaps = 1
+let g:buffergator_relative_numbering = 1
 nmap <F5> :BuffergatorOpen<CR><C-W>l
 " au VimEnter * exe 'BuffergatorOpen' | setf buffergator | exe "normal \<c-w>l"
 
