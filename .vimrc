@@ -132,10 +132,11 @@ set showcmd               " Show pending command
 set breakindent           " Preserve indent level when wrapping text
 set report=2              " Report the number of lines yanked or deleted
 set diffopt+=vertical     " Open diffs as vertical by default
-set wildmenu			  " Magic super ex completion
+set wildmenu              " Magic super ex completion
 set wildmode=longest,list,full " Subsequent wildmenu tabs complete, then list, then cycle
 set completeopt-=preview  " Never open preview window on autocomplete
-set hlsearch			  " Highlight by default
+set hlsearch              " Highlight by default
+set mouse=a               " Enable mouse scrolling for all modes in terminals
 "}}}
 
 " Status line
@@ -143,10 +144,13 @@ set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
 
 " Key mappings "{{{
-noremap <Left>    <Esc>:bp<CR>
-noremap <Up>    <Esc>:bp<CR>
-noremap <Right>    <Esc>:bn<CR>
-noremap <Down>    <Esc>:bn<CR>
+" This hackery allows the use of a number before the key
+" noremap <Left>    :<C-U>exe v:count."bp"<CR>
+" noremap <Up>   :<C-U>exe v:count."bp"<CR>
+" noremap <Right>    :<C-U>exe v:count."bn"<CR>
+" noremap <Down>    :<C-U>exe v:count."bn"<CR>
+noremap <C-K>   :<C-U>exe v:count."bp"<CR>
+noremap <C-J>    :<C-U>exe v:count."bn"<CR>
 nnoremap <C-s>        :w!<CR>
 inoremap <C-s>        <Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
@@ -156,9 +160,13 @@ nnoremap ? :set hls<CR>?
 if has('gui_running')
   nnoremap <silent> <Esc> :noh<CR><Esc>
 else
-  augroup no_highlight
-    autocmd TermResponse * nnoremap <esc> :noh<return><esc>
-  augroup END
+  nnoremap <silent> <Esc> :noh<CR><Esc>
+  "http://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting/1037182#1037182
+  nnoremap <Esc>^[ <Esc>^[
+  " don't know where I got this, but it doesn't seem to do the job
+  " augroup no_highlight
+  "   autocmd TermResponse * nnoremap <esc> :noh<return><esc>
+  " augroup END
 end
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
@@ -205,6 +213,8 @@ nnoremap <Leader>yp :let @+=expand("%:p")<CR>
 nnoremap <Leader>b :ls<CR>:b<Space>
 nnoremap <Leader>gg viw"gy:Ggrep <C-R>g<CR>
 vnoremap <Leader>gg "gy:Ggrep <C-R>g<CR>
+nnoremap <Leader>n :enew<CR>
+nnoremap <Leader>eh :e %:h/
 
 " FT commands
 nnoremap <Leader>fjs    :setf javascript<CR>
@@ -219,13 +229,14 @@ nnoremap <Leader>fmd    :setf markdown<CR>
 nnoremap <Leader>ftxt   :setf txt<CR>
 nnoremap <Leader>f        :setf<Space>
 
-" Comma commands - editing
+" Space commands - editing
 " Replace word under cursor
-nnoremap ,r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
-" Open gundo
-nnoremap ,gu :GundoShow<CR>
-" Close gundo
-nnoremap ,gc :GundoHide<CR>
+nnoremap <Space>r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
+nnoremap <Space>gu :GundoShow<CR>
+nnoremap <Space>gc :GundoHide<CR>
+" Make copy of line/selection and comment it
+nmap <Space>cc yypkgccj
+vmap <Space>cc yPgcacvac<Esc>j^
 
 " Add j/k to jumplist
 nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'k'<CR>
@@ -237,6 +248,13 @@ vnoremap p "_dP
 " Don't paste on middle mouse click (was hitting it accidentally)
 map <MiddleMouse> <Nop>
 imap <MiddleMouse> <Nop>
+
+" Make ZZ/ZQ quit all windows
+nnoremap ZZ :xa<CR>
+nnoremap ZQ :qa!<CR>
+
+" Don't need this
+unmap <C-Z>
 "}}}
 
 " File local settings"{{{
@@ -267,8 +285,10 @@ Plugin 'gmarik/Vundle.vim'
 " My bundles
 " Enhanced . support for plugins
 Plugin 'tpope/vim-repeat'
-" Pretty status line and more importantly, buffer line
+" Pretty status line - not too useful anymore (not using tabline)
 Plugin 'bling/vim-airline'
+" Themes to make it prettier
+Plugin 'vim-airline/vim-airline-themes'
 " Clojure quasi-repl
 Plugin 'tpope/vim-fireplace'
 " Clojure runtime files
@@ -352,6 +372,12 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'rust-lang/rust.vim'
 " TOML support
 Plugin 'cespare/vim-toml'
+" Ack interop
+Plugin 'mileszs/ack.vim'
+" " Required for EnhancedJumps
+" Plugin 'ingo-library'
+" " Jumps to MRU buffers, among other things TODO: configure controls
+" Plugin 'EnhancedJumps' " Suuuper buggy
 
 call vundle#end()
 filetype plugin indent on
@@ -389,6 +415,8 @@ let g:buffergator_split_size = 26
 let g:buffergator_suppress_keymaps = 1
 let g:buffergator_relative_numbering = 1
 nmap <F5> :BuffergatorOpen<CR><C-W>l
+nmap <C-M> :BuffergatorMruCyclePrev<CR>
+nmap <C-N> :BuffergatorMruCycleNext<CR>
 " au VimEnter * exe 'BuffergatorOpen' | setf buffergator | exe "normal \<c-w>l"
 
 let g:syntastic_javascript_checkers=['jshint']
@@ -451,6 +479,7 @@ endif
 nnoremap    [unite]   <Nop>
 nmap - [unite]
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy'])
 nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
 nnoremap [unite]b :<C-u>Unite -start-insert buffer<CR>
@@ -474,6 +503,10 @@ hi GitGutterChange ctermfg=60 ctermbg=252 guifg=#0000ff guibg=#cccccc guisp=#ccc
 let g:rust_recommended_style = 0
 " Similarly...
 au FileType vim setlocal textwidth=0
+
+" EnhancedJumps
+" unmap <C-O>
+" unmap <C-I>
 "}}}
 
 autocmd FileType haskell,elm setlocal expandtab
@@ -492,6 +525,9 @@ let g:colorizer_startup = 1
 
 " abbreviations
 au User AfterBundles Abolish hte the
+
+" turn off syntax when entering a big file
+autocmd BufWinEnter * if line2byte(line("$") + 1) > 300000 | syntax clear | endif
 
 " Save folds
 au BufWinLeave ?* mkview
