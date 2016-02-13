@@ -378,6 +378,8 @@ Plugin 'mileszs/ack.vim'
 " Plugin 'ingo-library'
 " " Jumps to MRU buffers, among other things TODO: configure controls
 " Plugin 'EnhancedJumps' " Suuuper buggy
+" Julia support
+Plugin 'JuliaLang/julia-vim'
 
 call vundle#end()
 filetype plugin indent on
