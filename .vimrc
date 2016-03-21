@@ -156,6 +156,11 @@ inoremap <C-s>        <Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
 nnoremap / :set hls<CR>/
 nnoremap ? :set hls<CR>?
+" see :help {
+nnoremap [[ ?{<CR>w99[{
+nnoremap ][ /}<CR>b99]}
+nnoremap ]] j0[[%/{<CR>
+nnoremap [] k$][%?}<CR>
 
 if has('gui_running')
   nnoremap <silent> <Esc> :noh<CR><Esc>
@@ -237,6 +242,13 @@ nnoremap <Space>gc :GundoHide<CR>
 " Make copy of line/selection and comment it
 nmap <Space>cc yypkgccj
 vmap <Space>cc yPgcacvac<Esc>j^
+" Print the highlight group applied under the cursor
+nnoremap <Space>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+" Delete trailing whitespace
+nnoremap <Space>dt :%s/\V\s\+\$//<CR><C-O>
+vnoremap <Space>dt :s/\V\s\+\$//<CR><C-O>
 
 " Add j/k to jumplist
 nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'k'<CR>
@@ -368,6 +380,8 @@ Plugin 'j201/vim-buffergator'
 Plugin 'qpkorr/vim-bufkill'
 " Show git diff info beside the buffer
 Plugin 'airblade/vim-gitgutter'
+" " Alternative
+" Plugin 'mhinz/vim-signify'
 " Rust support
 Plugin 'rust-lang/rust.vim'
 " TOML support
@@ -500,6 +514,8 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 hi GitGutterChange ctermfg=60 ctermbg=252 guifg=#0000ff guibg=#cccccc guisp=#cccccc
+
+let g:signify_vcs_list = [ 'git' ]
 
 " rust.vim overwrites indent settings. This makes me very angry. I don't want style pedantry from a highlighting plugin.
 let g:rust_recommended_style = 0
