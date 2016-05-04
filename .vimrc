@@ -137,11 +137,12 @@ set wildmode=longest,list,full " Subsequent wildmenu tabs complete, then list, t
 set completeopt-=preview  " Never open preview window on autocomplete
 set hlsearch              " Highlight by default
 set mouse=a               " Enable mouse scrolling for all modes in terminals
-"}}}
+set tags=./tags;/,tags  " Search recursively for tags file to / (TODO: check windows)
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
 set laststatus=2
+"}}}
 
 " Key mappings "{{{
 " This hackery allows the use of a number before the key
@@ -237,6 +238,8 @@ nnoremap <Leader>f        :setf<Space>
 " Space commands - editing
 " Replace word under cursor
 nnoremap <Space>r :%s/\V\C\<<C-R><C-W>\>//g<Left><Left>
+" Same, but populated
+nnoremap <Space>pr :%s/\V\C\<<C-R><C-W>\>/<C-R><C-W>/g<Left><Left>
 nnoremap <Space>gu :GundoShow<CR>
 nnoremap <Space>gc :GundoHide<CR>
 " Make copy of line/selection and comment it
@@ -473,8 +476,9 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " vim-typescript: cindent seems to break the indentation
 autocmd FileType typescript setlocal nocindent
 
-autocmd FileType json nnoremap ,f :%!python -m json.tool<CR>
-autocmd FileType json set syntax=javascript
+autocmd FileType json nnoremap <buffer> <Space>f :%!python -m json.tool<CR>
+autocmd FileType javascript nnoremap <buffer> <Space>f :%!python -m json.tool<CR>
+" autocmd FileType json set syntax=javascript
 
 " paredit options
 let g:paredit_leader = ','
@@ -497,6 +501,7 @@ nmap - [unite]
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy'])
 nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
+nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
 nnoremap [unite]b :<C-u>Unite -start-insert buffer<CR>
 nnoremap [unite]r :<C-u>Unite -start-insert register<CR>
