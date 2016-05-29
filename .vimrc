@@ -150,8 +150,8 @@ set laststatus=2
 " noremap <Up>   :<C-U>exe v:count."bp"<CR>
 " noremap <Right>    :<C-U>exe v:count."bn"<CR>
 " noremap <Down>    :<C-U>exe v:count."bn"<CR>
-noremap <C-K>   :<C-U>exe v:count."bp"<CR>
-noremap <C-J>    :<C-U>exe v:count."bn"<CR>
+nnoremap <C-K>   :<C-U>exe v:count."bp"<CR>
+nnoremap <C-J>    :<C-U>exe v:count."bn"<CR>
 nnoremap <C-s>        :w!<CR>
 inoremap <C-s>        <Esc>:w!<CR>
 map <F3> :source ~/.vim/_session <cr>     " Restore previous session
