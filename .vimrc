@@ -501,7 +501,7 @@ endif
 nnoremap    [unite]   <Nop>
 nmap - [unite]
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy'])
+call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class'])
 nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
 nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
