@@ -396,7 +396,7 @@ Plugin 'mileszs/ack.vim'
 " " Jumps to MRU buffers, among other things TODO: configure controls
 " Plugin 'EnhancedJumps' " Suuuper buggy
 " Julia support
-Plugin 'julia-vim'
+Plugin 'JuliaEditorSupport/julia-vim'
 " Markdown folding
 Plugin 'nelstrom/vim-markdown-folding'
 
