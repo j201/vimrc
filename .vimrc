@@ -1,8 +1,6 @@
 " vim set foldmarker={{{,}}}
 
 set nocompatible
-source $VIMRUNTIME/mswin.vim
-behave mswin
 
 " MyDiff function"{{{
 if has("win32") || has("win64")
@@ -138,6 +136,7 @@ set completeopt-=preview  " Never open preview window on autocomplete
 set hlsearch              " Highlight by default
 set mouse=a               " Enable mouse scrolling for all modes in terminals
 set tags=./tags;/,tags  " Search recursively for tags file to / (TODO: check windows)
+set display=lastline      " Display lines even when incomplete
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
@@ -186,6 +185,9 @@ noremap <C-Y> <C-Y>
 
 " Reset the behaviour of <C-A>
 noremap <C-A> <C-A>
+
+nnoremap <C-V> "+p
+inoremap <C-V> <Esc>"+p`]a
 
 " Use very nomagic by default - kinda hackish and a bit annoying
 nnoremap / /\V
@@ -267,9 +269,6 @@ imap <MiddleMouse> <Nop>
 " Make ZZ/ZQ quit all windows
 nnoremap ZZ :xa<CR>
 nnoremap ZQ :qa!<CR>
-
-" Don't need this
-unmap <C-Z>
 "}}}
 
 " File local settings"{{{
@@ -357,7 +356,7 @@ Plugin 'nathanaelkane/vim-indent-guides'
 " Abbreviations and substitutions that handle case and variants
 Plugin 'abolish.vim'
 " Lisp editing
-Plugin 'paredit.vim'
+" Plugin 'paredit.vim'
 " Fix colorschemes for the terminal
 " Plugin 'CSApprox'
 " Visualize the undo tree
@@ -366,8 +365,8 @@ Plugin 'sjl/gundo.vim'
 " Plugin 'SirVer/ultisnips'
 " Snippets
 Plugin 'honza/vim-snippets'
-" Ultisnips <-> Neocomplcache compat
-Plugin 'JazzCore/neocomplcache-ultisnips'
+" " Ultisnips <-> Neocomplcache compat
+" Plugin 'JazzCore/neocomplcache-ultisnips'
 " Elm support
 Plugin 'lambdatoast/elm.vim'
 " Git integration
@@ -399,6 +398,10 @@ Plugin 'mileszs/ack.vim'
 Plugin 'JuliaEditorSupport/julia-vim'
 " Markdown folding
 Plugin 'nelstrom/vim-markdown-folding'
+" Dependency for SQLUtilities
+Plugin 'Align'
+" SQL formatting and utils
+Plugin 'SQLUtilities'
 
 call vundle#end()
 filetype plugin indent on
@@ -482,11 +485,11 @@ autocmd FileType json nnoremap <buffer> <Space>f :%!python -m json.tool<CR>
 autocmd FileType javascript nnoremap <buffer> <Space>f :%!python -m json.tool<CR>
 " autocmd FileType json set syntax=javascript
 
-" paredit options
-let g:paredit_leader = ','
-let g:paredit_electric_return = 0
-autocmd FileType clojure nmap ,i ,Wa
-autocmd FileType clojure vmap ,i ,Wa
+" " paredit options
+" let g:paredit_leader = ','
+" let g:paredit_electric_return = 0
+" autocmd FileType clojure nmap ,i ,Wa
+" autocmd FileType clojure vmap ,i ,Wa
 
 " add more indentation in html
 let g:html_indent_inctags = "html,body,head,tbody,li"
@@ -501,7 +504,7 @@ endif
 nnoremap    [unite]   <Nop>
 nmap - [unite]
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class'])
+call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class', '*.swp'])
 nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
 nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
@@ -528,6 +531,9 @@ let g:signify_vcs_list = [ 'git' ]
 let g:rust_recommended_style = 0
 " Similarly...
 au FileType vim setlocal textwidth=0
+" Aaaand...
+" What the hell is the point of having my own options if the plugin writers think they know better than me?
+let g:python_recommended_style = 0
 
 " EnhancedJumps
 " unmap <C-O>
@@ -539,6 +545,8 @@ autocmd FileType haskell,elm setlocal expandtab
 autocmd FileType elm setf haskell
 
 au BufNewFile,BufRead package.json setlocal expandtab tabstop=2 shiftwidth=2
+
+au FileType julia let g:paredit_mode=0
 
 let g:Haskell_no_mapping=1
 
