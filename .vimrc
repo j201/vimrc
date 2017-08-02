@@ -269,6 +269,10 @@ imap <MiddleMouse> <Nop>
 " Make ZZ/ZQ quit all windows
 nnoremap ZZ :xa<CR>
 nnoremap ZQ :qa!<CR>
+
+" Swap 0 and ^
+nnoremap 0 ^
+nnoremap ^ 0
 "}}}
 
 " File local settings"{{{
