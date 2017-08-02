@@ -186,9 +186,6 @@ noremap <C-Y> <C-Y>
 " Reset the behaviour of <C-A>
 noremap <C-A> <C-A>
 
-nnoremap <C-V> "+p
-inoremap <C-V> <Esc>"+p`]a
-
 " Use very nomagic by default - kinda hackish and a bit annoying
 nnoremap / /\V
 nnoremap :s/ :s/\V
