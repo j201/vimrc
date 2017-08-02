@@ -449,6 +449,7 @@ nmap <C-N> :BuffergatorMruCycleNext<CR>
 
 let g:syntastic_javascript_checkers=['jshint']
 let g:syntastic_typescript_tsc_args='--target ES5 --module commonjs'
+let g:syntastic_python_checkers=['python']
 
 let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_working_path_mode = ''
