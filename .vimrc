@@ -548,6 +548,7 @@ autocmd FileType elm setf haskell
 
 au BufNewFile,BufRead package.json setlocal expandtab tabstop=2 shiftwidth=2
 
+autocmd BufRead,BufNewFile *.jl set filetype=julia
 au FileType julia let g:paredit_mode=0
 
 let g:Haskell_no_mapping=1
