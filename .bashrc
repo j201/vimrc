@@ -8,7 +8,7 @@ alias f=fg
 alias tree="tree -A"
 alias tmux="tmux -2"
 
-export PATH=$PATH:~/.local/bin:~/programming/eclipse
+export PATH=~/.local/bin:~/programming/eclipse:$PATH
 export PS1="\[\e[1;34m\]\h\[\em\]:\[\e[1;35m\]\A\[\em\]:\[\e[1;32m\]\w\[\e[m\]\[\e[0;36m\]$\[\e[m\] "
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
@@ -41,3 +41,8 @@ xterm*|rxvt*)
 *)
     ;;
 esac
+
+# added by Anaconda3 installer
+export PATH="/home/alex/anaconda3/bin:$PATH"
+
+HISTSIZE=5000
