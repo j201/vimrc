@@ -403,6 +403,8 @@ Plugin 'nelstrom/vim-markdown-folding'
 Plugin 'Align'
 " SQL formatting and utils
 Plugin 'SQLUtilities'
+" LaTeX support
+Plugin 'lervag/vimtex'
 
 call vundle#end()
 filetype plugin indent on
