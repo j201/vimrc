@@ -290,6 +290,8 @@ au VimLeave * mksession! ~/.vim/_session"
 " Show trailing whitespace, but I want to explicitly whitelist the file types
 au FileType c,h,javascript,python,clojure,haskell,cpp,css match SpellBad '\s\+$'
 
+au FileType tex setlocal wrap
+
 "}}}
 
 " Plugins"{{{
@@ -538,6 +540,13 @@ au FileType vim setlocal textwidth=0
 " Aaaand...
 " What the hell is the point of having my own options if the plugin writers think they know better than me?
 let g:python_recommended_style = 0
+
+if !exists('g:neocomplete#sources#omni#input_patterns')
+	let g:neocomplete#sources#omni#input_patterns = {}
+endif
+" let g:neocomplete#sources#omni#input_patterns.tex =
+" 	\ g:vimtex#re#neocomplete
+let g:matchup_matchparen_deferred = 1
 
 " EnhancedJumps
 " unmap <C-O>
