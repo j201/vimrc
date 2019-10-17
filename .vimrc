@@ -1,5 +1,3 @@
-" vim set foldmarker={{{,}}}
-
 set nocompatible
 
 " MyDiff function"{{{
@@ -137,6 +135,7 @@ set hlsearch              " Highlight by default
 set mouse=a               " Enable mouse scrolling for all modes in terminals
 set tags=./tags;/,tags  " Search recursively for tags file to / (TODO: check windows)
 set display=lastline      " Display lines even when incomplete
+set cm=blowfish2 		" Use strong encryption
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
@@ -407,6 +406,8 @@ Plugin 'Align'
 Plugin 'SQLUtilities'
 " LaTeX support
 Plugin 'lervag/vimtex'
+" Basic tmux integration
+Plugin 'tpope/vim-tbone'
 
 call vundle#end()
 filetype plugin indent on
