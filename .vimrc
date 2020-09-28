@@ -552,6 +552,9 @@ let g:matchup_matchparen_deferred = 1
 " EnhancedJumps
 " unmap <C-O>
 " unmap <C-I>
+
+let g:tex_flavor = 'latex'
+
 "}}}
 
 autocmd FileType haskell,elm setlocal expandtab
