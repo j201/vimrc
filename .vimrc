@@ -136,6 +136,9 @@ set mouse=a               " Enable mouse scrolling for all modes in terminals
 set tags=./tags;/,tags  " Search recursively for tags file to / (TODO: check windows)
 set display=lastline      " Display lines even when incomplete
 set cm=blowfish2 		" Use strong encryption
+set splitbelow			" When opening a vsplit or preview window, put the new one on the bottom
+set maxfuncdepth=500	" Trying to increase maxfuncdepth for LSP
+set previewheight=5		" Preview window height, e.g. for :LspHover
 
 " Status line
 set statusline=%.50F%m\ \ %y\ \ \ \ cwd:%{getcwd()}%=line:%l/%L\ \ col:%c\
@@ -250,6 +253,11 @@ nnoremap <Space>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") .
 " Delete trailing whitespace
 nnoremap <Space>dt :%s/\V\s\+\$//<CR><C-O>
 vnoremap <Space>dt :s/\V\s\+\$//<CR><C-O>
+" Copy and paste from /tmp/alex-vim-clip
+vnoremap <Space>y :w!/tmp/alex-vim-clip<CR>
+nnoremap <Space>yy V:w!/tmp/alex-vim-clip<CR>
+nnoremap <Space>p :r/tmp/alex-vim-clip<CR>
+vnoremap <Space>p <Esc>:r/tmp/alex-vim-clip<CR>gvd
 
 " Add j/k to jumplist
 nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'k'<CR>
@@ -311,8 +319,6 @@ Plugin 'tpope/vim-fireplace'
 Plugin 'guns/vim-clojure-static'
 " Syntax checker
 Plugin 'scrooloose/syntastic'
-" Node repl interface
-Plugin 'intuited/vim-noderepl'
 " Bracket manipulation
 Plugin 'tpope/vim-surround'
 " Markdown syntax
@@ -332,8 +338,10 @@ Plugin 'tsukkee/unite-tag'
 Plugin 'justinmk/vim-gtfo'
 " Smooth scrolling
 Plugin 'terryma/vim-smooth-scroll'
-" Automatically load autocomplete menu
-Plugin 'neocomplcache'
+" " Automatically load autocomplete menu
+" Plugin 'neocomplcache'
+" Alternative autocomplete
+Plugin 'prabirshrestha/asyncomplete.vim'
 " C# syntax/highlighting
 " TODO: switch to OrangeT/vim-csharp if it ever get fixed up
 Plugin 'j201/vim-csharp'
@@ -408,6 +416,16 @@ Plugin 'SQLUtilities'
 Plugin 'lervag/vimtex'
 " Basic tmux integration
 Plugin 'tpope/vim-tbone'
+" LSP support
+Plugin 'prabirshrestha/vim-lsp'
+" Auto-install LSP
+Plugin 'mattn/vim-lsp-settings'
+" LSP <-> asynccomplete
+Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+" Use buffer as asyncomplete source
+Plugin 'prabirshrestha/asyncomplete-buffer.vim'
+" Use files/directories as ac source
+Plugin 'prabirshrestha/asyncomplete-file.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -460,10 +478,26 @@ let g:ctrlp_extensions = ['buffertag']
 " nnoremap <Leader>o :CtrlPMRUFiles<Enter>
 let g:ctrlp_custom_ignore='\v[\/](node_modules|target|build)$'
 
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_min_syntax_length = 2
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><CR> neocomplcache#close_popup()."\<CR>"
+" Neocomplcache settings
+" let g:neocomplcache_enable_at_startup = 1
+" let g:neocomplcache_min_syntax_length = 2
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" inoremap <expr><CR> neocomplcache#close_popup()."\<CR>"
+
+" asyncomplete settings
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr><CR> asyncomplete#close_popup()."\<CR>"
+
+call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['go'],
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ 'config': {
+    \    'max_buffer_size': 5000000,
+    \  },
+    \ }))
 
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 15, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 15, 2)<CR>
@@ -511,7 +545,7 @@ endif
 nnoremap    [unite]   <Nop>
 nmap - [unite]
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class', '*.swp'])
+call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class', '*.swp', 'target/'])
 nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
 nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
@@ -554,6 +588,30 @@ let g:matchup_matchparen_deferred = 1
 " unmap <C-I>
 
 let g:tex_flavor = 'latex'
+
+" LSP settings
+
+function! s:on_lsp_buffer_enabled() abort
+    " setlocal omnifunc=lsp#complete
+    " setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> <C-]> <plug>(lsp-definition)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>r <plug>(lsp-rename)
+    nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 
 "}}}
 
