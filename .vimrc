@@ -60,13 +60,6 @@ com! -nargs=1 -complete=filetype New enew | setf <args>
 com! BufNumReset call BufNumReset()
 "}}}
 
-if !has("gui_running") && !empty($CONEMUBUILD)
-  " set term=xterm
-  " set t_Co=256
-  " let &t_AB="\e[48;5;%dm"
-  " let &t_AF="\e[38;5;%dm"
-endif
-
 " OS-specific settings{{{
 if has("gui_running")
     if has("unix")
@@ -295,7 +288,7 @@ au FileType vim set foldmethod=marker
 au VimLeave * mksession! ~/.vim/_session"
 
 " Show trailing whitespace, but I want to explicitly whitelist the file types
-au FileType c,h,javascript,python,clojure,haskell,cpp,css match SpellBad '\s\+$'
+au FileType c,h,javascript,python,clojure,haskell,cpp,css,java match SpellBad '\s\+$'
 
 au FileType tex setlocal wrap
 
@@ -555,7 +548,8 @@ nnoremap [unite]j :<C-u>Unite -start-insert jump<CR>
 nnoremap [unite]c :<C-u>Unite -start-insert change<CR>
 nnoremap [unite]t :<C-u>Unite -start-insert tag<CR>
 function! s:unite_settings()
-  nmap <buffer> <esc> <plug>(unite_exit)
+	nmap <buffer> <esc> <plug>(unite_exit)
+	let b:asyncomplete_enable = 0
 endfunction
 autocmd FileType unite call s:unite_settings()
 
@@ -599,7 +593,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> gr <plug>(lsp-references)
     nmap <buffer> gi <plug>(lsp-implementation)
     nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>r <plug>(lsp-rename)
+    nmap <buffer> <Space>sr <plug>(lsp-rename)
+    nmap <buffer> <Space>f <plug>(lsp-code-action)
     nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
