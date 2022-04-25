@@ -7,6 +7,7 @@ alias temp="cat /sys/class/thermal/thermal_zone0/temp"
 alias f=fg
 alias tree="tree -A"
 alias tmux="tmux -2"
+alias ls="ls --color=auto"
 
 export PATH=~/.local/bin:~/programming/eclipse:$PATH
 export PS1="\[\e[1;34m\]\h\[\em\]:\[\e[1;35m\]\A\[\em\]:\[\e[1;32m\]\w\[\e[m\]\[\e[0;36m\]$\[\e[m\] "
@@ -46,3 +47,9 @@ esac
 export PATH="/home/alex/anaconda3/bin:$PATH"
 
 HISTSIZE=5000
+HISTCONTROL=ignoredups
+
+# Remove (base) when using conda
+PS1="$(echo $PS1 | sed 's/(base) //') "
+
+shopt -s globstar
