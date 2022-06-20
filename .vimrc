@@ -295,132 +295,125 @@ au FileType tex setlocal wrap
 "}}}
 
 " Plugins"{{{
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim'
+call plug#begin()
 
 " My bundles
 " Enhanced . support for plugins
-Plugin 'tpope/vim-repeat'
+Plug 'tpope/vim-repeat'
 " Pretty status line - not too useful anymore (not using tabline)
-Plugin 'bling/vim-airline'
+Plug 'bling/vim-airline'
 " Themes to make it prettier
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline-themes'
 " Clojure quasi-repl
-Plugin 'tpope/vim-fireplace'
+Plug 'tpope/vim-fireplace'
 " Clojure runtime files
-Plugin 'guns/vim-clojure-static'
+Plug 'guns/vim-clojure-static'
 " Syntax checker
-Plugin 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 " Bracket manipulation
-Plugin 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 " Markdown syntax
-Plugin 'hallison/vim-markdown'
+Plug 'hallison/vim-markdown'
 " Trying this instead of JavaScript-Indent
-" Plugin 'pangloss/vim-javascript'
-Plugin 'JavaScript-Indent'
+Plug 'pangloss/vim-javascript'
 " Fuzzy file searching
-" Plugin 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
 " Here goes...
-Plugin 'Shougo/unite.vim'
+Plug 'Shougo/unite.vim'
 " MRU sources for unite
-Plugin 'Shougo/neomru.vim'
+Plug 'Shougo/neomru.vim'
 " tags source for unite
-Plugin 'tsukkee/unite-tag'
+Plug 'tsukkee/unite-tag'
 " gof and got to open file in explorer/terminal
-Plugin 'justinmk/vim-gtfo'
+Plug 'justinmk/vim-gtfo'
 " Smooth scrolling
-Plugin 'terryma/vim-smooth-scroll'
+Plug 'terryma/vim-smooth-scroll'
 " " Automatically load autocomplete menu
-" Plugin 'neocomplcache'
+" Plug 'neocomplcache'
 " Alternative autocomplete
-Plugin 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
 " C# syntax/highlighting
 " TODO: switch to OrangeT/vim-csharp if it ever get fixed up
-Plugin 'j201/vim-csharp'
+Plug 'j201/vim-csharp'
 " Add :Rename command
-Plugin 'Rename'
+Plug 'wojtekmach/vim-rename'
 " Typescript syntax etc.
-Plugin 'leafgarland/typescript-vim'
+Plug 'leafgarland/typescript-vim'
 " Camel case motions and text objects
-Plugin 'bkad/CamelCaseMotion'
+Plug 'bkad/CamelCaseMotion'
 " A better way to make
-Plugin 'tpope/vim-dispatch'
+Plug 'tpope/vim-dispatch'
 " Auto-commenting with motions
-Plugin 'tpope/vim-commentary'
+Plug 'tpope/vim-commentary'
 " Highlight css colours
-Plugin 'ap/vim-css-color'
+Plug 'ap/vim-css-color'
 " Faster HTML editing - see http://emmet.io/
-Plugin 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 " Less syntax
-Plugin 'groenewege/vim-less'
+Plug 'groenewege/vim-less'
 " Indent guides (<Leader>ig)
-Plugin 'nathanaelkane/vim-indent-guides'
+Plug 'nathanaelkane/vim-indent-guides'
 " Abbreviations and substitutions that handle case and variants
-Plugin 'abolish.vim'
+Plug 'tpope/vim-abolish'
 " Lisp editing
-" Plugin 'paredit.vim'
+" Plug 'paredit.vim'
 " Fix colorschemes for the terminal
-" Plugin 'CSApprox'
+" Plug 'CSApprox'
 " Visualize the undo tree
-Plugin 'sjl/gundo.vim'
+Plug 'sjl/gundo.vim'
 " Snippet runner
-" Plugin 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 " Snippets
-Plugin 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 " " Ultisnips <-> Neocomplcache compat
-" Plugin 'JazzCore/neocomplcache-ultisnips'
+" Plug 'JazzCore/neocomplcache-ultisnips'
 " Elm support
-Plugin 'lambdatoast/elm.vim'
+Plug 'lambdatoast/elm.vim'
 " Git integration
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 " My colour scheme
-Plugin 'j201/stainless'
+Plug 'j201/stainless'
 " junegunn's nutso plugin for aligning around particular characters
-Plugin 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align'
 " Persistent buffer list
-" Plugin 'jeetsukumaran/vim-buffergator'
-Plugin 'j201/vim-buffergator'
+" Plug 'jeetsukumaran/vim-buffergator'
+Plug 'j201/vim-buffergator'
 " Close a buffer without closing its window
-Plugin 'qpkorr/vim-bufkill'
+Plug 'qpkorr/vim-bufkill'
 " Show git diff info beside the buffer
-Plugin 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 " " Alternative
-" Plugin 'mhinz/vim-signify'
+" Plug 'mhinz/vim-signify'
 " Rust support
-Plugin 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim'
 " TOML support
-Plugin 'cespare/vim-toml'
+Plug 'cespare/vim-toml'
 " Ack interop
-Plugin 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim'
 " " Required for EnhancedJumps
-" Plugin 'ingo-library'
+" Plug 'ingo-library'
 " " Jumps to MRU buffers, among other things TODO: configure controls
-" Plugin 'EnhancedJumps' " Suuuper buggy
+" Plug 'EnhancedJumps' " Suuuper buggy
 " Julia support
-Plugin 'JuliaEditorSupport/julia-vim'
+Plug 'JuliaEditorSupport/julia-vim'
 " Markdown folding
-Plugin 'nelstrom/vim-markdown-folding'
-" Dependency for SQLUtilities
-Plugin 'Align'
-" SQL formatting and utils
-Plugin 'SQLUtilities'
+Plug 'nelstrom/vim-markdown-folding'
 " LaTeX support
-Plugin 'lervag/vimtex'
+Plug 'lervag/vimtex'
 " Basic tmux integration
-Plugin 'tpope/vim-tbone'
+Plug 'tpope/vim-tbone'
 " LSP support
-Plugin 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/vim-lsp'
 " Auto-install LSP
-Plugin 'mattn/vim-lsp-settings'
+Plug 'mattn/vim-lsp-settings'
 " LSP <-> asynccomplete
-Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " Use buffer as asyncomplete source
-Plugin 'prabirshrestha/asyncomplete-buffer.vim'
+Plug 'prabirshrestha/asyncomplete-buffer.vim'
 " Use files/directories as ac source
-Plugin 'prabirshrestha/asyncomplete-file.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
 
-call vundle#end()
+call plug#end()
 filetype plugin indent on
 syntax on
 "}}}
