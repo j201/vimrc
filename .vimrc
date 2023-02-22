@@ -109,9 +109,11 @@ set ffs=unix,dos          " FFS, use unix line endings!
 set ignorecase            " Ignore case by default in searches
 set spelllang=en_ca       " Rocks and trees and trees and rocks...
 set autoread              " Autoreload files changed externally
+set textwidth=100   	  " Set width for gq to 100 - removing c and t from formatoptions should prevent auto-wrapping
 set formatoptions-=r      " Don't repeat comment leaders
-set formatoptions-=c      " Don't repeat comment leaders
 set formatoptions-=o      " Don't repeat comment leaders
+set formatoptions-=c      " Don't auto-wrap text
+set formatoptions-=t      " Don't auto-wrap text
 set viewdir=~/.vim/view   " Set view folder
 set noerrorbells visualbell t_vb= " No error bells or flashing
 autocmd GUIEnter * set visualbell t_vb=
@@ -247,10 +249,10 @@ nnoremap <Space>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") .
 nnoremap <Space>dt :%s/\V\s\+\$//<CR><C-O>
 vnoremap <Space>dt :s/\V\s\+\$//<CR><C-O>
 " Copy and paste from /tmp/alex-vim-clip
-vnoremap <Space>y :w!/tmp/alex-vim-clip<CR>
-nnoremap <Space>yy V:w!/tmp/alex-vim-clip<CR>
-nnoremap <Space>p :r/tmp/alex-vim-clip<CR>
-vnoremap <Space>p <Esc>:r/tmp/alex-vim-clip<CR>gvd
+vnoremap <Space>y <Esc>:keepalt '<,'>w! /tmp/alex-vim-clip<CR>
+nnoremap <Space>yy V<Esc>:keepalt '<,'>w! /tmp/alex-vim-clip<CR>
+nnoremap <Space>p :keepalt r /tmp/alex-vim-clip<CR>
+vnoremap <Space>p <Esc>:keepalt r /tmp/alex-vim-clip<CR>gvd
 
 " Add j/k to jumplist
 nnoremap <silent> k :<C-U>execute 'normal!' (v:count > 1 ? "m'" . v:count : 'g') . 'k'<CR>
@@ -456,8 +458,7 @@ let g:buffergator_split_size = 26
 let g:buffergator_suppress_keymaps = 1
 let g:buffergator_relative_numbering = 1
 nmap <F5> :BuffergatorOpen<CR><C-W>l
-nmap <C-M> :BuffergatorMruCyclePrev<CR>
-nmap <C-N> :BuffergatorMruCycleNext<CR>
+nmap <C-N> :BuffergatorMruCyclePrev<CR>
 " au VimEnter * exe 'BuffergatorOpen' | setf buffergator | exe "normal \<c-w>l"
 
 let g:syntastic_javascript_checkers=['jshint']
@@ -492,10 +493,10 @@ call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options
     \  },
     \ }))
 
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 15, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 15, 2)<CR>
-noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 15, 4)<CR>
-noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 15, 4)<CR>
+nnoremap <silent> <c-u> :call smooth_scroll#up(&scroll, 15, 2)<CR>
+nnoremap <silent> <c-d> :call smooth_scroll#down(&scroll, 15, 2)<CR>
+nnoremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 15, 4)<CR>
+nnoremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 15, 4)<CR>
 
 let Tlist_Auto_Open=0
 let Tlist_Show_One_File = 1
@@ -548,7 +549,9 @@ nnoremap [unite]j :<C-u>Unite -start-insert jump<CR>
 nnoremap [unite]c :<C-u>Unite -start-insert change<CR>
 nnoremap [unite]t :<C-u>Unite -start-insert tag<CR>
 function! s:unite_settings()
-	nmap <buffer> <esc> <plug>(unite_exit)
+	" nmap <buffer> <esc> <Plug>(unite_exit)
+	nmap <buffer> <Esc><Esc> <Plug>(unite_exit)
+	" inoremap <buffer> <Esc><Esc> <plug>(unite_exit)
 	let b:asyncomplete_enable = 0
 endfunction
 autocmd FileType unite call s:unite_settings()
@@ -569,6 +572,8 @@ au FileType vim setlocal textwidth=0
 " Aaaand...
 " What the hell is the point of having my own options if the plugin writers think they know better than me?
 let g:python_recommended_style = 0
+
+let g:python_indent.disable_parentheses_indenting = 1
 
 if !exists('g:neocomplete#sources#omni#input_patterns')
 	let g:neocomplete#sources#omni#input_patterns = {}
@@ -607,6 +612,23 @@ augroup lsp_install
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+
+" Uncomment to debug LSP
+let g:lsp_log_verbose=1
+let g:lsp_log_file='/tmp/lsp.log'
+
+" Disable pycodestyle in pylsp
+let g:lsp_settings = {
+\   'pylsp-all': {
+\     'workspace_config': {
+\       'plugins': {
+\         'pycodestyle': {
+\           'enabled': 0
+\         }
+\       }
+\     }
+\   },
+\}
 
 "}}}
 
