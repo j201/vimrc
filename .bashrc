@@ -8,6 +8,7 @@ alias f=fg
 alias tree="tree -A"
 alias tmux="tmux -2"
 alias ls="ls --color=auto"
+alias syncgit="rsync -avz --exclude='/.git' --filter=\"dir-merge,- .gitignore\""
 
 export PATH=~/.local/bin:~/programming/eclipse:$PATH
 export PS1="\[\e[1;34m\]\h\[\em\]:\[\e[1;35m\]\A\[\em\]:\[\e[1;32m\]\w\[\e[m\]\[\e[0;36m\]$\[\e[m\] "
@@ -42,9 +43,6 @@ xterm*|rxvt*)
 *)
     ;;
 esac
-
-# added by Anaconda3 installer
-export PATH="/home/alex/anaconda3/bin:$PATH"
 
 HISTSIZE=5000
 HISTCONTROL=ignoredups

@@ -277,7 +277,7 @@ nnoremap ^ 0
 " File local settings"{{{
 set nocindent " No C indentation by default - it seems to break smartindent
 
-au FileType txt,text,md,markdown setlocal formatoptions+=t        " autowrap
+" au FileType txt,text,md,markdown setlocal formatoptions+=t        " autowrap
 au FileType txt,text,md,markdown setlocal wrap            " Wrap text - NOT WORKING
 
 au FileType md setf markdown
@@ -290,7 +290,7 @@ au FileType vim set foldmethod=marker
 au VimLeave * mksession! ~/.vim/_session"
 
 " Show trailing whitespace, but I want to explicitly whitelist the file types
-au FileType c,h,javascript,python,clojure,haskell,cpp,css,java match SpellBad '\s\+$'
+au FileType c,h,javascript,python,clojure,haskell,cpp,css match SpellBad '\s\+$'
 
 au FileType tex setlocal wrap
 
@@ -540,6 +540,7 @@ nnoremap    [unite]   <Nop>
 nmap - [unite]
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class', '*.swp', 'target/'])
+call unite#custom#source('file_rec', 'ignore_pattern', '__pycache__\|\.venv')
 nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
 nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
@@ -573,6 +574,9 @@ au FileType vim setlocal textwidth=0
 " What the hell is the point of having my own options if the plugin writers think they know better than me?
 let g:python_recommended_style = 0
 
+if !exists('g:python_indent')
+	let g:python_indent = {}
+endif
 let g:python_indent.disable_parentheses_indenting = 1
 
 if !exists('g:neocomplete#sources#omni#input_patterns')
