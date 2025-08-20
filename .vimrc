@@ -573,6 +573,13 @@ nnoremap -l :BLines<CR>
 nnoremap -g :RG<CR>
 let g:fzf_layout = { 'down': '50%' }
 
+" FZF commands instead
+nnoremap -p :Files<CR>
+nnoremap -b :Buffers<CR>
+nnoremap -r :Rg<CR>
+
+let g:fzf_layout = { 'down': '~40%' }
+
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
@@ -640,20 +647,33 @@ let g:lsp_log_file='/tmp/lsp.log'
 
 " Disable pycodestyle in pylsp
 let g:lsp_settings = {
-			\   'pyls-all': {
-			\     'workspace_config': {
-			\       'pyls': {
-			\         'configurationSources': ['pycodestyle'],
-			\         'plugins': {
-			\           'pycodestyle': {
-			\             'enabled': v:false,
-			\             'ignore': ['E501']
-			\           },
-			\         }
-			\       }
-			\     }
-			\   },
-			\}
+\   'pyls-all': {
+\     'workspace_config': {
+\       'pyls': {
+\         'configurationSources': ['pycodestyle'],
+\         'plugins': {
+\           'pycodestyle': {
+\             'enabled': v:false,
+\             'ignore': ['E501']
+\           },
+\         }
+\       }
+\     }
+\   },
+\   'pylsp-all': {
+\     'workspace_config': {
+\       'pylsp': {
+\         'configurationSources': ['pycodestyle'],
+\         'plugins': {
+\           'pycodestyle': {
+\             'enabled': v:false,
+\             'ignore': ['E501']
+\           }
+\         }
+\       }
+\     }
+\   },
+\}
 let g:lsp_diagnostics_echo_cursor =11
 let g:lsp_diagnostics_virtual_text_enabled=0
 
@@ -685,7 +705,7 @@ au User AfterBundles Abolish hte the
 autocmd BufWinEnter * if line2byte(line("$") + 1) > 300000 | syntax clear | endif
 
 " Save folds
-au BufWinLeave ?* mkview
+" au BufWinLeave ?* mkview
 " au BufWinEnter ?* silent loadview
 
 " Set default filetype to txt
