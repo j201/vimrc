@@ -571,13 +571,6 @@ nnoremap -c :Commands<CR>
 nnoremap -b :Buffers<CR>
 nnoremap -l :BLines<CR>
 nnoremap -g :RG<CR>
-let g:fzf_layout = { 'down': '50%' }
-
-" FZF commands instead
-nnoremap -p :Files<CR>
-nnoremap -b :Buffers<CR>
-nnoremap -r :Rg<CR>
-
 let g:fzf_layout = { 'down': '~40%' }
 
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
