@@ -220,6 +220,7 @@ nnoremap <Leader>eh :e %:h/
 
 " FT commands
 nnoremap <Leader>fjs    :setf javascript<CR>
+nnoremap <Leader>fjson  :setf json<CR>
 nnoremap <Leader>fcs    :setf cs<CR>
 nnoremap <Leader>fclj   :setf clojure<CR>
 nnoremap <Leader>fc     :setf c<CR>
@@ -229,6 +230,7 @@ nnoremap <Leader>fhtml  :setf html<CR>
 nnoremap <Leader>fxml   :setf xml<CR>
 nnoremap <Leader>fmd    :setf markdown<CR>
 nnoremap <Leader>ftxt   :setf txt<CR>
+nnoremap <Leader>fpy    :setf python<CR>
 nnoremap <Leader>f        :setf<Space>
 
 " Space commands - editing
@@ -290,7 +292,7 @@ au FileType vim set foldmethod=marker
 au VimLeave * mksession! ~/.vim/_session"
 
 " Show trailing whitespace, but I want to explicitly whitelist the file types
-au FileType c,h,javascript,python,clojure,haskell,cpp,css match SpellBad '\s\+$'
+au FileType c,h,javascript,python,clojure,haskell,cpp,css,java match SpellBad '\s\+$'
 
 au FileType tex setlocal wrap
 
@@ -321,14 +323,12 @@ Plugin 'hallison/vim-markdown'
 " Trying this instead of JavaScript-Indent
 " Plugin 'pangloss/vim-javascript'
 Plugin 'JavaScript-Indent'
-" Fuzzy file searching
-" Plugin 'kien/ctrlp.vim'
-" Here goes...
-Plugin 'Shougo/unite.vim'
-" MRU sources for unite
-Plugin 'Shougo/neomru.vim'
-" tags source for unite
-Plugin 'tsukkee/unite-tag'
+" " Here goes...
+" Plugin 'Shougo/unite.vim'
+" " MRU sources for unite
+" Plugin 'Shougo/neomru.vim'
+" " tags source for unite
+" Plugin 'tsukkee/unite-tag'
 " gof and got to open file in explorer/terminal
 Plugin 'justinmk/vim-gtfo'
 " Smooth scrolling
@@ -421,6 +421,11 @@ Plugin 'prabirshrestha/asyncomplete-lsp.vim'
 Plugin 'prabirshrestha/asyncomplete-buffer.vim'
 " Use files/directories as ac source
 Plugin 'prabirshrestha/asyncomplete-file.vim'
+" yaml folds
+Plugin 'pedrohdz/vim-yaml-folds'
+" FZF - unite replacement
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -536,26 +541,37 @@ if !has('python')
 endif
 
 " Unite settings
-nnoremap    [unite]   <Nop>
-nmap - [unite]
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class', '*.swp', 'target/'])
-call unite#custom#source('file_rec', 'ignore_pattern', '__pycache__\|\.venv')
-nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
-nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
-nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
-nnoremap [unite]b :<C-u>Unite -start-insert buffer<CR>
-nnoremap [unite]r :<C-u>Unite -start-insert register<CR>
-nnoremap [unite]j :<C-u>Unite -start-insert jump<CR>
-nnoremap [unite]c :<C-u>Unite -start-insert change<CR>
-nnoremap [unite]t :<C-u>Unite -start-insert tag<CR>
-function! s:unite_settings()
-	" nmap <buffer> <esc> <Plug>(unite_exit)
-	nmap <buffer> <Esc><Esc> <Plug>(unite_exit)
-	" inoremap <buffer> <Esc><Esc> <plug>(unite_exit)
-	let b:asyncomplete_enable = 0
-endfunction
-autocmd FileType unite call s:unite_settings()
+" nnoremap    [unite]   <Nop>
+" nmap - [unite]
+" " call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" " call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class', '*.swp', 'target/', '__pycache__/'])
+" call unite#custom#source('file_rec', 'ignore_pattern', '__pycache__\|\.venv')
+" nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
+" nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
+" nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
+" nnoremap [unite]b :<C-u>Unite -start-insert buffer<CR>
+" nnoremap [unite]r :<C-u>Unite -start-insert register<CR>
+" nnoremap [unite]j :<C-u>Unite -start-insert jump<CR>
+" nnoremap [unite]c :<C-u>Unite -start-insert change<CR>
+" nnoremap [unite]t :<C-u>Unite -start-insert tag<CR>
+" function! s:unite_settings()
+" 	nmap <buffer> <esc> <Plug>(unite_exit)
+" 	" nmap <buffer> <Esc><Esc> <Plug>(unite_exit)
+" 	" inoremap <buffer> <Esc><Esc> <plug>(unite_exit)
+" 	let b:asyncomplete_enable = 0
+" endfunction
+" autocmd FileType unite call s:unite_settings()
+
+" FZF options
+let $FZF_DEFAULT_COMMAND="find \\( -name \".venv*\" -o -name .git -o -name *.sw* -o -name *.pyc \\) -prune -o -type f -print"
+nnoremap -p :Files<CR>
+nnoremap -g :GFiles<CR>
+nnoremap -o :History<CR>
+nnoremap -c :Commands<CR>
+nnoremap -b :Buffers<CR>
+nnoremap -l :BLines<CR>
+nnoremap -g :RG<CR>
+let g:fzf_layout = { 'down': '50%' }
 
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
@@ -607,6 +623,7 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
+    nmap <buffer> <Space>d :LspDocumentDiagnostics<CR><C-W>p
     
     " refer to doc to add more commands
 endfunction
@@ -623,16 +640,22 @@ let g:lsp_log_file='/tmp/lsp.log'
 
 " Disable pycodestyle in pylsp
 let g:lsp_settings = {
-\   'pylsp-all': {
-\     'workspace_config': {
-\       'plugins': {
-\         'pycodestyle': {
-\           'enabled': 0
-\         }
-\       }
-\     }
-\   },
-\}
+			\   'pyls-all': {
+			\     'workspace_config': {
+			\       'pyls': {
+			\         'configurationSources': ['pycodestyle'],
+			\         'plugins': {
+			\           'pycodestyle': {
+			\             'enabled': v:false,
+			\             'ignore': ['E501']
+			\           },
+			\         }
+			\       }
+			\     }
+			\   },
+			\}
+let g:lsp_diagnostics_echo_cursor =11
+let g:lsp_diagnostics_virtual_text_enabled=0
 
 "}}}
 
@@ -681,3 +704,10 @@ if filereadable($HOME . "/_vimrclocal")
 elseif filereadable($HOME . "/.vimrclocal")
     so $HOME/.vimrclocal
 endif
+
+if &term =~ '^xterm'
+	" normal mode
+	let &t_EI .= "\<Esc>[0 q"
+	" insert mode
+	let &t_SI .= "\<Esc>[6 q"
+endi
