@@ -13,8 +13,8 @@ alias syncgit="rsync -avz --exclude='/.git' --filter=\"dir-merge,- .gitignore\""
 export PATH=~/.local/bin:~/programming/eclipse:$PATH
 export PS1="\[\e[1;34m\]\h\[\em\]:\[\e[1;35m\]\A\[\em\]:\[\e[1;32m\]\w\[\e[m\]\[\e[0;36m\]$\[\e[m\] "
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_OPTS=-e
+# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# export FZF_DEFAULT_OPTS=-e
 
 # https://mg.pov.lt/blog/bash-prompt.html
 # If this is an xterm set the title to user@host:dir

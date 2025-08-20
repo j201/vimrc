@@ -421,6 +421,9 @@ Plugin 'prabirshrestha/asyncomplete-lsp.vim'
 Plugin 'prabirshrestha/asyncomplete-buffer.vim'
 " Use files/directories as ac source
 Plugin 'prabirshrestha/asyncomplete-file.vim'
+" FZF integration
+Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf'
 
 call vundle#end()
 filetype plugin indent on
@@ -541,11 +544,11 @@ nmap - [unite]
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#custom#source('file_rec', 'ignore_globs', ['*.ll', '*.s', '*.bc', '*.o', '*.dsy', '*.class', '*.swp', 'target/'])
 call unite#custom#source('file_rec', 'ignore_pattern', '__pycache__\|\.venv')
-nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
+" nnoremap [unite]p :<C-u>Unite -start-insert file_rec<CR>
 nnoremap [unite]h :<C-u>Unite -start-insert file_rec:<C-R>=expand('%:h')<CR><CR>
 nnoremap [unite]o :<C-u>Unite -start-insert file_mru<CR>
-nnoremap [unite]b :<C-u>Unite -start-insert buffer<CR>
-nnoremap [unite]r :<C-u>Unite -start-insert register<CR>
+" nnoremap [unite]b :<C-u>Unite -start-insert buffer<CR>
+" nnoremap [unite]r :<C-u>Unite -start-insert register<CR>
 nnoremap [unite]j :<C-u>Unite -start-insert jump<CR>
 nnoremap [unite]c :<C-u>Unite -start-insert change<CR>
 nnoremap [unite]t :<C-u>Unite -start-insert tag<CR>
@@ -556,6 +559,13 @@ function! s:unite_settings()
 	let b:asyncomplete_enable = 0
 endfunction
 autocmd FileType unite call s:unite_settings()
+
+" FZF commands instead
+nnoremap -p :Files<CR>
+nnoremap -b :Buffers<CR>
+nnoremap -r :Rg<CR>
+
+let g:fzf_layout = { 'down': '~40%' }
 
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
@@ -625,9 +635,12 @@ let g:lsp_log_file='/tmp/lsp.log'
 let g:lsp_settings = {
 \   'pylsp-all': {
 \     'workspace_config': {
-\       'plugins': {
-\         'pycodestyle': {
-\           'enabled': 0
+\       'pylsp': {
+\         'configurationSources': ['pycodestyle'],
+\         'plugins': {
+\           'pycodestyle': {
+\             'enabled': v:false
+\           }
 \         }
 \       }
 \     }
@@ -662,7 +675,7 @@ au User AfterBundles Abolish hte the
 autocmd BufWinEnter * if line2byte(line("$") + 1) > 300000 | syntax clear | endif
 
 " Save folds
-au BufWinLeave ?* mkview
+" au BufWinLeave ?* mkview
 " au BufWinEnter ?* silent loadview
 
 " Set default filetype to txt
